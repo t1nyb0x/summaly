@@ -9,6 +9,7 @@ import tracer from 'trace-redirect';
 import Summary from './summary';
 import IPlugin from './iplugin';
 import general from './general';
+import { attachImage } from './attach-image';
 
 // Load builtin plugins
 const _builtinPlugins = requireAll({
@@ -63,6 +64,8 @@ export default async (url: string, options?: Options): Promise<Result> => {
 	if (summary == null) {
 		throw 'failed summarize';
 	}
+
+	await attachImage(summary);
 
 	return Object.assign(summary, {
 		url: actualUrl

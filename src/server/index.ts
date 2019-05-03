@@ -5,6 +5,11 @@ import summaly from '../';
 const app = new Koa();
 
 app.use(async ctx => {
+	if (!ctx.query.url) {
+		ctx.status = 400;
+		return;
+	}
+
 	try {
 		const summary = await summaly(ctx.query.url, {
 			followRedirects: false
@@ -18,4 +23,4 @@ app.use(async ctx => {
 
 const server = http.createServer(app.callback());
 
-server.listen(80);
+server.listen(process.env.PORT || 80);

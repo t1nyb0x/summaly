@@ -18,7 +18,11 @@ client.set('maxDataSize', 1024 * 1024);
 
 import Summary from './summary';
 
-export default async (url: URL.Url): Promise<Summary> => {
+export default async (url: URL.Url, lang :string = null): Promise<Summary> => {
+	client.set('headers', {
+		'Accept-Language': lang
+	});
+
 	const res = await client.fetch(url.href);
 
 	if (res.error) {

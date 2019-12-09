@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as request from 'request';
 import * as URL from 'url';
 import Summary from './summary';
-import fileType from 'file-type';
+import fileType = require('file-type');
 import isSvg from 'is-svg';
 import { ConvertToJpeg } from './utils/image-processor';
 

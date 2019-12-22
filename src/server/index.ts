@@ -17,11 +17,14 @@ app.use(async ctx => {
 		});
 
 		ctx.body = summary;
+		ctx.set('Cache-Control', 'public, max-age=3600');
 	} catch (e) {
-		if (e.statusCode > 400 && e.statusCode < 500) {
+		if (e.statusCode >= 400 && e.statusCode < 500) {
 			ctx.status = e.statusCode;
+			ctx.set('Cache-Control', 'public, max-age=3600');
 		} else {
 			ctx.status = 500;
+			ctx.set('Cache-Control', 'public, max-age=300');
 		}
 	}
 });

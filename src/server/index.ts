@@ -18,7 +18,11 @@ app.use(async ctx => {
 
 		ctx.body = summary;
 	} catch (e) {
-		ctx.status = 500;
+		if (e.statusCode > 400 && e.statusCode < 500) {
+			ctx.status = e.statusCode;
+		} else {
+			ctx.status = 500;
+		}
 	}
 });
 

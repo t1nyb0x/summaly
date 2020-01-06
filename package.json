@@ -9,7 +9,8 @@
   "main": "./built/index.js",
   "types": "./built/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "server": "node ./built/server"
   },
 	"resolutions": {
     "lodash": "^4.17.13",

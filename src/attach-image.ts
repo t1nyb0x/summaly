@@ -33,7 +33,7 @@ async function convertUrl(url: string) {
 			const image = await ConvertToJpeg(path, 200, 200);
 			return `data:image/jpeg;base64,${image.data.toString('base64')}`;
 		} else {
-			return `data:${type};base64,${fs.readFileSync(path).toString('base64')}`;
+			return url;
 		}
 	} catch (e) {
 		return url;
@@ -80,7 +80,7 @@ async function fetch(url: string, path: string) {
 export async function detectMine(path: string) {
 	let type = await detectType(path);
 
-	if (type.mime.startsWith('image/')) {
+	if (['image/jpeg', 'image/png', 'image/gif'].includes(type.mime)) {
 		const imageSize = await detectImageSize(path).catch(() => null);
 
 		// うまく判定できない画像は octet-stream にする

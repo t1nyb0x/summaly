@@ -13,8 +13,8 @@ client.set('headers', {
   'User-Agent': `${name}/${version}`
 });
 client.set('referer', false);
-client.set('timeout', 10000);
-client.set('maxDataSize', 5 * 1024 * 1024);
+client.set('timeout', 20000);
+client.set('maxDataSize', 10 * 1024 * 1024);
 
 import Summary from './summary';
 
@@ -25,17 +25,15 @@ export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
 		'Accept-Language': lang
 	});
 
-	const res = await client.fetch(url.href);
-
-	if (res.error) {
-		throw 'something happened';
-	}
+	const res = await client.fetch(url.href).catch((e: any) => {
+		throw `${e.statusCode || e.message}`;
+	});
 
 	const contentType: string = res.response.headers['content-type'];
 
 	// HTMLじゃなかった場合は中止
 	if (contentType.indexOf('text/html') === -1) {
-		return null;
+		throw `not html ${contentType}`;
 	}
 
 	const $ = res.$;
@@ -46,7 +44,7 @@ export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
 		$('title').text();
 
 	if (title === undefined || title === null) {
-		return null;
+		throw 'no title';
 	}
 
 	title = clip(entities.decode(title), 100);

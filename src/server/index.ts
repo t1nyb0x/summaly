@@ -23,6 +23,7 @@ app.use(async ctx => {
 			ctx.status = e.statusCode;
 			ctx.set('Cache-Control', 'public, max-age=3600');
 		} else {
+			console.log(`summaly error: ${e} ${ctx.query.url}`);
 			ctx.status = 500;
 			ctx.set('Cache-Control', 'public, max-age=300');
 		}

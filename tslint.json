@@ -9,7 +9,7 @@
 		"comment-format": [true,
 			"check-upper-case"
 		],
-		"curly": true,
+		"curly": false,
 		"eofline": true,
 		"forin": false,
 		"indent": [true, "tabs"],
@@ -19,10 +19,7 @@
 		"label-undefined": true,
 		"max-line-length": false,
 		"member-access": false,
-		"member-ordering": [true,
-			"static-before-instance",
-			"variables-before-functions"
-		],
+		"member-ordering": [false],
 		"no-any": false,
 		"no-arg": true,
 		"no-bitwise": true,
@@ -58,14 +55,10 @@
 			"check-whitespace"
 		],
 		"quotemark": false,
-		"radix": true,
+		"radix": false,
 		"semicolon": true,
 		"switch-default": false,
 		"triple-equals": false,
-		"typedef": [true,
-			"call-signature",
-			"property-declaration"
-		],
 		"typedef-whitespace": [true, {
 			"call-signature": "nospace",
 			"index-signature": "nospace",

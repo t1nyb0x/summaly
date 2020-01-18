@@ -10,7 +10,7 @@ const entities = new AllHtmlEntities();
 
 import * as client from 'cheerio-httpcli';
 client.set('headers', {
-  'User-Agent': `${name}/${version}`
+	'User-Agent': `${name}/${version}`
 });
 client.set('referer', false);
 client.set('timeout', 20000);
@@ -95,7 +95,7 @@ export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
 		$('link[rel="icon"]').attr('href') ||
 		'/favicon.ico';
 
-	const sensitive = $('.tweet').attr('data-possibly-sensitive') === 'true'
+	const sensitive = $('.tweet').attr('data-possibly-sensitive') === 'true';
 
 	const find = (path: string) => new Promise<string>(done => {
 		const target = URL.resolve(url.href, path);

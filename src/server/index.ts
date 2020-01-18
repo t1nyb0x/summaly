@@ -27,4 +27,8 @@ app.use(async ctx => {
 
 const server = http.createServer(app.callback());
 
-server.listen(process.env.PORT || 3030);
+const port = process.env.PORT || 3030;
+
+server.listen(port);
+
+console.log(`Listening on port ${port}`);

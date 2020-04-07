@@ -1,5 +1,6 @@
 import * as URL from 'url';
-import * as request from 'request-promise-native';
+import fetch from 'node-fetch';
+import { httpAgent, httpsAgent } from '../utils/agent';
 import * as debug from 'debug';
 import summary from '../summary';
 import clip from './../utils/clip';
@@ -19,8 +20,17 @@ export async function summarize(url: URL.Url): Promise<summary> {
 	log(`title is ${title}`);
 	log(`endpoint is ${endpoint}`);
 
-	let body = await request(endpoint);
-	body = JSON.parse(body);
+	const body = await fetch(url, {
+		timeout: 10 * 1000,
+		agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent
+	}).then(res => {
+		if (!res.ok) {
+			throw `${res.status} ${res.statusText}`;
+		} else {
+			return res.json();
+		}
+	});
+
 	log(body);
 
 	if (!('query' in body) || !('pages' in body.query)) {

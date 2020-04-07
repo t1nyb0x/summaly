@@ -1,7 +1,7 @@
 import { name, version } from '../package.json';
 import * as URL from 'url';
-import * as request from 'request';
-import nullOrEmpty from './utils/null-or-empty';
+import fetch from 'node-fetch';
+import { httpAgent, httpsAgent } from './utils/agent';
 import clip from './utils/clip';
 import cleanupTitle from './utils/cleanup-title';
 
@@ -97,18 +97,16 @@ export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
 
 	const sensitive = $('.tweet').attr('data-possibly-sensitive') === 'true';
 
-	const find = (path: string) => new Promise<string>(done => {
+	const find = async (path: string) => {
 		const target = URL.resolve(url.href, path);
-		request.head(target, (err, res) => {
-			if (err) {
-				done(null);
-			} else if (res.statusCode == 200) {
-				done(target);
-			} else {
-				done(null);
-			}
-		});
-	});
+		return await fetch(url, {
+			method: 'head',
+			timeout: 10 * 1000,
+			agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent
+		})
+		.then(res => res.status === 200 ? target : null)
+		.catch(() => null);
+	};
 
 	// 相対的なURL (ex. test) を絶対的 (ex. /test) に変換
 	const toAbsolute = (relativeURLString: string): string => {

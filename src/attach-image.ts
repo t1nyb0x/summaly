@@ -1,11 +1,12 @@
 import * as tmp from 'tmp';
 import * as fs from 'fs';
-import * as request from 'request';
+import fetch from 'node-fetch';
 import * as URL from 'url';
 import Summary from './summary';
 import * as fileType from 'file-type';
 import isSvg from 'is-svg';
 import { ConvertToJpeg } from './utils/image-processor';
+import { httpAgent, httpsAgent } from './utils/agent';
 const probeImageSize = require('probe-image-size');
 
 export async function attachImage(summary: Summary) {
@@ -25,7 +26,7 @@ async function convertUrl(url: string) {
 	});
 
 	try {
-		await fetch(url, path);
+		await fetchUrl(url, path);
 
 		const [type] = await detectMine(path);
 
@@ -42,9 +43,25 @@ async function convertUrl(url: string) {
 	}
 }
 
-async function fetch(url: string, path: string) {
+async function fetchUrl(url: string, path: string) {
+	const response = await fetch(new URL.URL(url).href, {
+			timeout: 30 * 1000,
+			agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent,
+		}).then(response => {
+		if (!response.ok) {
+			throw response.status;
+		} else {
+			return response;
+		}
+	});
+
 	await new Promise((res, rej) => {
 		const writable = fs.createWriteStream(path);
+
+		response.body.on('error', (error: any) => {
+			writable.close();
+			rej(error);
+		});
 
 		writable.on('finish', () => {
 			res();
@@ -54,26 +71,7 @@ async function fetch(url: string, path: string) {
 			rej(error);
 		});
 
-		const requestUrl = URL.parse(url).pathname.match(/[^\u0021-\u00ff]/) ? encodeURI(url) : url;
-
-		const req = request({
-			url: requestUrl,
-			timeout: 10 * 1000,
-		});
-
-		req.pipe(writable);
-
-		req.on('response', response => {
-			if (response.statusCode !== 200) {
-				writable.close();
-				rej(response.statusCode);
-			}
-		});
-
-		req.on('error', error => {
-			writable.close();
-			rej(error);
-		});
+		response.body.pipe(writable);
 	});
 }
 

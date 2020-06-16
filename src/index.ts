@@ -20,6 +20,9 @@ const builtinPlugins = Object.keys(_builtinPlugins)
 	.map(key => _builtinPlugins[key]);
 
 type Options = {
+	/**
+	 * Accept-Language for the request
+	 */
 	lang?: string;
 
 	/**

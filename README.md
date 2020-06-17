@@ -4,7 +4,7 @@ summaly
 fork of [summaly](https://github.com/syuilo/summaly)
 
 オリジナルとの違いは
-- 画像をData URIで添付する＆リサイズもする (たいていクライアント側は軽くなりますが、サーバー側はちょっと重くなります)
+- 画像をData URIで添付する＆リサイズもする (たいていクライアント側は軽くなりますが、summalyロジック自体はちょっと重くなります)
 - ~~Twitterのアカウント設定によりsensitiveフラグを付けるように~~ Merged
 - リクエスト部分をマルチインスタンス対応
 - 依存関係などを最新化

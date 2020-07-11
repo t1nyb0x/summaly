@@ -20,7 +20,7 @@ export async function summarize(url: URL.Url): Promise<summary> {
 	log(`title is ${title}`);
 	log(`endpoint is ${endpoint}`);
 
-	const body = await fetch(url, {
+	const body = await fetch(new URL.URL(endpoint).href, {
 		timeout: 10 * 1000,
 		agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent
 	}).then(res => {

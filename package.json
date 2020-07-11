@@ -14,7 +14,7 @@
     "server": "node ./server.js"
   },
   "resolutions": {
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "lodash.merge": "^4.6.2"
   },
   "devDependencies": {

@@ -1,1 +1,1 @@
-require('./built/server');
+require('./built/server/index.js');

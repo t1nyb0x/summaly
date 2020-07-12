@@ -10,8 +10,8 @@
   "types": "./built/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node ./server.js",
-    "server": "node ./server.js"
+    "start": "node ./built/server/index.js",
+    "server": "node ./built/server/index.js"
   },
   "resolutions": {
     "lodash": "^4.17.19",

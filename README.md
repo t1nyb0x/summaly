@@ -8,6 +8,8 @@ fork of [summaly](https://github.com/syuilo/summaly)
 - キャッシュの調整
 - ~~Twitterのアカウント設定によりsensitiveフラグを付けるように~~ Merged
 - リクエスト部分をマルチインスタンス対応
+- Keep-Alive対応
+- `youtu.be`, `nicovideo.jp`など微修正
 - 依存関係などを最新化
 
 ### Install and build

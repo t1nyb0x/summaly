@@ -17,7 +17,7 @@ app.use(async ctx => {
 		});
 
 		ctx.body = summary;
-		ctx.set('Cache-Control', 'public, max-age=3600');
+		ctx.set('Cache-Control', 'public, max-age=604800');
 	} catch (e) {
 		console.log(`summaly error: ${e} ${ctx.query.url}`);
 		ctx.status = 500;

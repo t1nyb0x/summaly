@@ -26,6 +26,7 @@
     "typescript": "3.9.6"
   },
   "dependencies": {
+    "@koa/cors": "^3.1.0",
     "@types/node-fetch": "^2.5.5",
     "cheerio-httpcli": "0.8.1",
     "debug": "4.1.1",

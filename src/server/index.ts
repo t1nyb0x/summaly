@@ -1,8 +1,13 @@
 import * as http from 'http';
 import * as Koa from 'koa';
 import summaly from '../';
+import * as cors from '@koa/cors';
 
 const app = new Koa();
+
+app.use(cors({
+	origin: '*'
+}));
 
 app.use(async ctx => {
 	if (!ctx.query.url) {

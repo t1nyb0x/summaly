@@ -9,6 +9,7 @@ import Summary from './summary';
 import IPlugin from './iplugin';
 import general from './general';
 import { attachImage } from './attach-image';
+import { applySensitive } from './apply-sensitive';
 
 // Load builtin plugins
 const _builtinPlugins = requireAll({
@@ -72,6 +73,8 @@ export default async (url: string, options?: Options): Promise<Summary> => {
 	if (opts.attachImage) await attachImage(summary);
 
 	if (summary.url == null) summary.url = actualUrl;
+
+	await applySensitive(summary).catch(e => console.log(e));
 
 	return summary;
 };

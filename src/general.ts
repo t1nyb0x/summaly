@@ -10,7 +10,9 @@ const entities = new AllHtmlEntities();
 import Summary from './summary';
 import { createInstance } from './client';
 
-export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
+export default async (_url: URL.Url, lang: string = null): Promise<Summary> => {
+	const url = new URL.URL(_url.href);
+
 	if (lang && !lang.match(/^[\w-]+(\s*,\s*[\w-]+)*$/)) lang = null;
 
 	const client = createInstance();
@@ -118,7 +120,7 @@ export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
 	};
 };
 
-async function findFavicon(favicon: string | null | undefined, url: URL.Url) {
+async function findFavicon(favicon: string | null | undefined, url: URL.URL) {
 	// 絶対URLはリモート解決しない
 	if (favicon?.match(/^https?:/)) return favicon;
 

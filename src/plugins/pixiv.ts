@@ -1,10 +1,10 @@
+// Pixiv R-18 画像補完プラグイン
+// HUGE THANKS TO TISSUE AND PIXIV.CAT!
+// tissue: https://github.com/shikorism/tissue/blob/134a11ad512e50afe72f4286048dd239da58bfcd/app/MetadataResolver/PixivResolver.php
 import fetch from 'node-fetch';
 import { httpAgent, httpsAgent } from '../utils/agent';
 import summary from '../summary';
 import general from '../general';
-
-// HUGE THANKS TO TISSUE AND PIXIV.CAT!
-// tissue: https://github.com/shikorism/tissue/blob/134a11ad512e50afe72f4286048dd239da58bfcd/app/MetadataResolver/PixivResolver.php
 
 export function test(url: URL): boolean {
 	return /^www\.pixiv\.net$/.test(url.hostname);

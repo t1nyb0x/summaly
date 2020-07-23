@@ -4,15 +4,16 @@ summaly
 fork of [summaly](https://github.com/syuilo/summaly)
 
 オリジナルとの違いは
-- 画像をData URIで添付する＆リサイズもする
+- 画像をData URIで添付する＆リサイズもするように
 - キャッシュの調整
+- エラーメッセージの調整
 - ~~Twitterのアカウント設定によりsensitiveフラグを付けるように~~ Merged
 - リクエスト部分をマルチインスタンス対応
-- Keep-Alive対応
 - `youtu.be`, `nicovideo.jp`などの不具合修正
 - CORS対応
 - faviconリクエストを削減
-- request廃止
+- faviconやthumbnailの相対URLの補完を修正
+- サーバー動作では使用するプラグインを制限するように
 - 依存関係などを最新化
 
 ### Install and build

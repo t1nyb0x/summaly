@@ -1,7 +1,6 @@
 import * as tmp from 'tmp';
 import * as fs from 'fs';
 import fetch from 'node-fetch';
-import * as URL from 'url';
 import Summary from './summary';
 import * as fileType from 'file-type';
 import isSvg from 'is-svg';
@@ -44,7 +43,7 @@ async function convertUrl(url: string) {
 }
 
 async function fetchUrl(url: string, path: string) {
-	const response = await fetch(new URL.URL(url).href, {
+	const response = await fetch(url, {
 			timeout: 30 * 1000,
 			agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent,
 		}).then(response => {

@@ -3,7 +3,6 @@
  * https://github.com/syuilo/summaly
  */
 
-import * as URL from 'url';
 import requireAll = require('require-all');
 import tracer from 'trace-redirect';
 import Summary from './summary';
@@ -59,7 +58,7 @@ export default async (url: string, options?: Options): Promise<Result> => {
 
 	const actualUrl = opts.followRedirects ? await tracer(url).catch(() => url) : url;
 
-	const _url = URL.parse(actualUrl, true);
+	const _url = new URL(actualUrl);
 
 	// Find matching plugin
 	const match = plugins.filter(plugin => plugin.test(_url))[0];

@@ -1,4 +1,4 @@
-import * as URL from 'url';
+import { resolve, parse } from 'url';
 import fetch from 'node-fetch';
 import { httpAgent, httpsAgent } from './utils/agent';
 import clip from './utils/clip';
@@ -10,9 +10,7 @@ const entities = new AllHtmlEntities();
 import Summary from './summary';
 import { createInstance } from './client';
 
-export default async (_url: URL.Url, lang: string = null): Promise<Summary> => {
-	const url = new URL.URL(_url.href);
-
+export default async (url: URL, lang: string = null): Promise<Summary> => {
 	if (lang && !lang.match(/^[\w-]+(\s*,\s*[\w-]+)*$/)) lang = null;
 
 	const client = createInstance();
@@ -52,7 +50,7 @@ export default async (_url: URL.Url, lang: string = null): Promise<Summary> => {
 		$('link[rel="apple-touch-icon"]').attr('href') ||
 		$('link[rel="apple-touch-icon image_src"]').attr('href');
 
-	image = image ? URL.resolve(url.href, image) : null;
+	image = image ? resolve(url.href, image) : null;
 
 	const playerUrl =
 		$('meta[property="twitter:player"]').attr('content') ||
@@ -120,12 +118,12 @@ export default async (_url: URL.Url, lang: string = null): Promise<Summary> => {
 	};
 };
 
-async function findFavicon(favicon: string | null | undefined, url: URL.URL) {
+async function findFavicon(favicon: string | null | undefined, url: URL) {
 	// 絶対URLはリモート解決しない
 	if (favicon?.match(/^https?:/)) return favicon;
 
 	const find = async (path: string) => {
-		const target = URL.resolve(url.href, path);
+		const target = resolve(url.href, path);
 		return await fetch(url, {
 			method: 'get',
 			headers: {
@@ -143,7 +141,7 @@ async function findFavicon(favicon: string | null | undefined, url: URL.URL) {
 
 	// 相対的なURL (ex. test) を絶対的 (ex. /test) に変換
 	const toAbsolute = (relativeURLString: string): string => {
-		const relativeURL = URL.parse(relativeURLString);
+		const relativeURL = parse(relativeURLString);
 		const isAbsolute = relativeURL.slashes || relativeURL.path[0] === '/';
 
 		// 既に絶対的なら、即座に値を返却

@@ -92,37 +92,9 @@ export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
 		$('link[rel="icon"]').attr('href') ||
 		'/favicon.ico';
 
+	const icon = await findFavicon(favicon, url);
+
 	const sensitive = $('.tweet').attr('data-possibly-sensitive') === 'true';
-
-	const find = async (path: string) => {
-		const target = URL.resolve(url.href, path);
-		return await fetch(url, {
-			method: 'head',
-			timeout: 10 * 1000,
-			agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent
-		})
-		.then(res => res.status === 200 ? target : null)
-		.catch(() => null);
-	};
-
-	// 相対的なURL (ex. test) を絶対的 (ex. /test) に変換
-	const toAbsolute = (relativeURLString: string): string => {
-		const relativeURL = URL.parse(relativeURLString);
-		const isAbsolute = relativeURL.slashes || relativeURL.path[0] === '/';
-
-		// 既に絶対的なら、即座に値を返却
-		if (isAbsolute) {
-			return relativeURLString;
-		}
-
-		// スラッシュを付けて返却
-		return '/' + relativeURLString;
-	};
-
-	const icon = await find(favicon) ||
-		// 相対指定を絶対指定に変換し再試行
-		await find(toAbsolute(favicon)) ||
-		null;
 
 	// Clean up the title
 	title = cleanupTitle(title, siteName);
@@ -145,3 +117,46 @@ export default async (url: URL.Url, lang: string = null): Promise<Summary> => {
 		sensitive,
 	};
 };
+
+async function findFavicon(favicon: string | null | undefined, url: URL.Url) {
+	// 絶対URLはリモート解決しない
+	if (favicon?.match(/^https?:/)) return favicon;
+
+	const find = async (path: string) => {
+		const target = URL.resolve(url.href, path);
+		return await fetch(url, {
+			method: 'get',
+			headers: {
+				Range: `bytes=0-1023`
+			},
+			timeout: 10 * 1000,
+			agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent
+		})
+		.then(res => {
+			if (res.status === 200) return target;
+			return null;
+		})
+		.catch(() => null);
+	};
+
+	// 相対的なURL (ex. test) を絶対的 (ex. /test) に変換
+	const toAbsolute = (relativeURLString: string): string => {
+		const relativeURL = URL.parse(relativeURLString);
+		const isAbsolute = relativeURL.slashes || relativeURL.path[0] === '/';
+
+		// 既に絶対的なら、即座に値を返却
+		if (isAbsolute) {
+			return relativeURLString;
+		}
+
+		// スラッシュを付けて返却
+		return '/' + relativeURLString;
+	};
+
+	const icon = await find(favicon) ||
+		// 相対指定を絶対指定に変換し再試行
+		await find(toAbsolute(favicon)) ||
+		null;
+
+	return icon;
+}

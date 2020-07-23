@@ -29,6 +29,8 @@ type Options = {
 	 */
 	followRedirects?: boolean;
 
+	attachImage?: boolean;
+
 	/**
 	 * Custom Plugins
 	 */
@@ -45,6 +47,7 @@ type Result = Summary & {
 const defaultOptions = {
 	lang: null,
 	followRedirects: true,
+	attachImage: true,
 	plugins: null
 } as Options;
 
@@ -70,7 +73,7 @@ export default async (url: string, options?: Options): Promise<Result> => {
 		throw 'failed summarize';
 	}
 
-	await attachImage(summary);
+	if (opts.attachImage) await attachImage(summary);
 
 	return Object.assign(summary, {
 		url: actualUrl

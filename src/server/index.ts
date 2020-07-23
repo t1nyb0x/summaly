@@ -5,6 +5,8 @@ import * as cors from '@koa/cors';
 
 const app = new Koa();
 
+const allowedPlugins = ['wikipedia'];
+
 app.use(cors({
 	origin: '*'
 }));
@@ -18,7 +20,8 @@ app.use(async ctx => {
 	try {
 		const summary = await summaly(ctx.query.url, {
 			lang: ctx.query.lang,
-			followRedirects: false
+			followRedirects: false,
+			allowedPlugins
 		});
 
 		ctx.body = summary;

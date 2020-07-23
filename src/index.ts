@@ -15,9 +15,6 @@ const _builtinPlugins = requireAll({
 	dirname: __dirname + '/plugins'
 }) as { [key: string]: IPlugin };
 
-const builtinPlugins = Object.keys(_builtinPlugins)
-	.map(key => _builtinPlugins[key]);
-
 type Options = {
 	/**
 	 * Accept-Language for the request
@@ -35,6 +32,8 @@ type Options = {
 	 * Custom Plugins
 	 */
 	plugins?: IPlugin[];
+
+	allowedPlugins?: string[],
 };
 
 type Result = Summary & {
@@ -56,6 +55,10 @@ const defaultOptions = {
  */
 export default async (url: string, options?: Options): Promise<Result> => {
 	const opts = Object.assign(defaultOptions, options);
+
+	const builtinPlugins = Object.keys(_builtinPlugins)
+		.filter(key => opts.allowedPlugins == null || opts.allowedPlugins.includes(key))
+		.map(key => _builtinPlugins[key]);
 
 	const plugins = builtinPlugins.concat(opts.plugins || []);
 

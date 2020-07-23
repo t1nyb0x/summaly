@@ -30,6 +30,8 @@ export default async (url: URL, lang: string | null = null): Promise<Summary> =>
 
 	const $ = res.$;
 
+	const landingUrl = $.documentInfo().url;
+
 	let title =
 		$('meta[property="og:title"]').attr('content') ||
 		$('meta[property="twitter:title"]').attr('content') ||
@@ -50,7 +52,7 @@ export default async (url: URL, lang: string | null = null): Promise<Summary> =>
 		$('link[rel="apple-touch-icon image_src"]').attr('href') ||
 		null;
 
-	image = image ? resolve(url.href, image) : null;
+	image = image ? resolve(landingUrl, image) : null;
 
 	const playerUrl =
 		$('meta[property="twitter:player"]').attr('content') ||
@@ -97,7 +99,7 @@ export default async (url: URL, lang: string | null = null): Promise<Summary> =>
 		$('link[rel="icon"]').attr('href') ||
 		'/favicon.ico';
 
-	const icon = favicon ? resolve(url.href, favicon) : null;
+	const icon = favicon ? resolve(landingUrl, favicon) : null;
 
 	const sensitive = $('.tweet').attr('data-possibly-sensitive') === 'true';
 

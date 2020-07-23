@@ -1,0 +1,8 @@
+# 画像をData-URIとして添付するか
+attachImage: true
+
+# 使用するプラグイン (適宜コメントアウト)
+allowedPlugins:
+#  - wikipedia
+#  - amazon
+#  - pixiv

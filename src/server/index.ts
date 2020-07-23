@@ -2,10 +2,11 @@ import * as http from 'http';
 import * as Koa from 'koa';
 import summaly from '../';
 import * as cors from '@koa/cors';
+import loadConfig from './load-config';
 
 const app = new Koa();
 
-const allowedPlugins = ['wikipedia'];
+const config = loadConfig();
 
 app.use(cors({
 	origin: '*'
@@ -21,7 +22,8 @@ app.use(async ctx => {
 		const summary = await summaly(ctx.query.url, {
 			lang: ctx.query.lang,
 			followRedirects: false,
-			allowedPlugins
+			attachImage: typeof config.attachImage === 'boolean' ? config.attachImage : true,
+			allowedPlugins: config.allowedPlugins || [],
 		});
 
 		ctx.body = summary;

@@ -30,7 +30,7 @@ export async function summarize(url: URL): Promise<summary> {
 		$('#productDescription').text() ||
 		$('meta[name="description"]').attr('content');
 
-	const thumbnail: string = $('#landingImage').attr('src');
+	const thumbnail = $('#landingImage').attr('src') || null;
 
 	const playerUrl =
 		$('meta[property="twitter:player"]').attr('content') ||
@@ -38,11 +38,13 @@ export async function summarize(url: URL): Promise<summary> {
 
 	const playerWidth = parseInt(
 		$('meta[property="twitter:player:width"]').attr('content') ||
-		$('meta[name="twitter:player:width"]').attr('content'));
+		$('meta[name="twitter:player:width"]').attr('content') ||
+		'');
 
 	const playerHeight = parseInt(
 		$('meta[property="twitter:player:height"]').attr('content') ||
-		$('meta[name="twitter:player:height"]').attr('content'));
+		$('meta[name="twitter:player:height"]').attr('content') ||
+		'');
 
 	return {
 		title: title ? title.trim() : null,

@@ -36,13 +36,6 @@ type Options = {
 	allowedPlugins?: string[],
 };
 
-type Result = Summary & {
-	/**
-	 * The actual url of that web page
-	 */
-	url: string;
-};
-
 const defaultOptions = {
 	lang: null,
 	followRedirects: true,
@@ -53,7 +46,7 @@ const defaultOptions = {
 /**
  * Summarize an web page
  */
-export default async (url: string, options?: Options): Promise<Result> => {
+export default async (url: string, options?: Options): Promise<Summary> => {
 	const opts = Object.assign(defaultOptions, options);
 
 	const builtinPlugins = Object.keys(_builtinPlugins)
@@ -78,7 +71,7 @@ export default async (url: string, options?: Options): Promise<Result> => {
 
 	if (opts.attachImage) await attachImage(summary);
 
-	return Object.assign(summary, {
-		url: actualUrl
-	});
+	if (summary.url == null) summary.url = actualUrl;
+
+	return summary;
 };

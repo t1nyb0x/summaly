@@ -122,5 +122,6 @@ export default async (url: URL, lang: string | null = null): Promise<Summary> =>
 		},
 		sitename: siteName,
 		sensitive,
+		url: landingUrl
 	};
 };

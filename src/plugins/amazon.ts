@@ -19,9 +19,17 @@ export function test(url: URL): boolean {
 }
 
 export async function summarize(url: URL): Promise<summary> {
+	const u = new URL(url.href);
+
+	const m = u.pathname.match(/^\/(?:[^/]+\/)?(?:dp|gp\/product)\/(\w+)/);
+	if (m) {
+		u.pathname = `/dp/${m[1]}`;
+		u.search = '';
+	}
+
 	const client = createInstance();
 
-	const res = await client.fetch(url.href);
+	const res = await client.fetch(u.href);
 	const $ = res.$;
 
 	const title = $('#title').text();
@@ -56,6 +64,7 @@ export async function summarize(url: URL): Promise<summary> {
 			width: playerWidth || null,
 			height: playerHeight || null
 		},
-		sitename: 'Amazon'
+		sitename: 'Amazon',
+		url: u.href
 	};
 }

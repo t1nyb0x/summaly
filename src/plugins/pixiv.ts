@@ -5,6 +5,7 @@ import fetch from 'node-fetch';
 import { httpAgent, httpsAgent } from '../utils/agent';
 import summary from '../summary';
 import general from '../general';
+import { browserUA } from '../client';
 
 export function test(url: URL): boolean {
 	return /^www\.pixiv\.net$/.test(url.hostname);
@@ -29,7 +30,7 @@ export async function summarize(url: URL): Promise<summary> {
 		timeout: 10 * 1000,
 		agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent,
 		headers: {
-			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36',
+			'User-Agent': browserUA,
 			'Referer': landingUrl
 		}
 	}).then(res => {

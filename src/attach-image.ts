@@ -9,6 +9,7 @@ import isSvg from 'is-svg';
 import { ConvertToJpeg } from './utils/image-processor';
 import { httpAgent, httpsAgent } from './utils/agent';
 import { AbortController } from 'abort-controller';
+import { browserUA } from './client';
 
 const pipeline = util.promisify(stream.pipeline);
 
@@ -58,6 +59,9 @@ async function fetchUrl(url: string, path: string) {
 			timeout: 30 * 1000,
 			signal: controller.signal,
 			agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent,
+			headers: {
+				'User-Agent': browserUA,
+			}
 		}).then(response => {
 		if (!response.ok) {
 			throw response.status;

@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import Summary from './summary';
 import { httpAgent, httpsAgent } from './utils/agent';
+import { browserUA } from './client';
 
 export async function applySensitive(summary: Summary): Promise<Summary> {
 	if (summary.sensitive) return summary;
@@ -25,7 +26,7 @@ async function getJson(url: string, referer: string) {
 		timeout: 10 * 1000,
 		agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent,
 		headers: {
-			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36',
+			'User-Agent': browserUA,
 			'Referer': referer
 		}
 	}).then(res => {

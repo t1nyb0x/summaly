@@ -13,8 +13,10 @@ fork of [summaly](https://github.com/syuilo/summaly)
 - CORS対応
 - faviconリクエストを削減
 - faviconやthumbnailの相対URLの補完を修正
+- 追加プラグイン
 - サーバー動作では使用するプラグインを制限するように
 - followRedirects無効でリダイレクトされた場合でもリダイレクト先URLを返すように
+- 特定サービスでの`sensitive`フラグの出し分け
 - 依存関係などを最新化
 
 ### Install and build

@@ -4,7 +4,7 @@ summaly
 fork of [summaly](https://github.com/syuilo/summaly)
 
 オリジナルとの違いは
-- 画像をData URIで添付する＆リサイズもするように
+- 画像をData URIで添付する＆リサイズもするオプションを追加
 - キャッシュの調整
 - エラーメッセージの調整
 - ~~Twitterのアカウント設定によりsensitiveフラグを付けるように~~ Merged
@@ -14,6 +14,7 @@ fork of [summaly](https://github.com/syuilo/summaly)
 - faviconリクエストを削減
 - faviconやthumbnailの相対URLの補完を修正
 - サーバー動作では使用するプラグインを制限するように
+- followRedirects無効でリダイレクトされた場合でもリダイレクト先URLを返すように
 - 依存関係などを最新化
 
 ### Install and build

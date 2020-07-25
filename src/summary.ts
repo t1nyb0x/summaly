@@ -1,3 +1,5 @@
+import CheerioHttpcli = require("cheerio-httpcli");
+
 type Summary = {
 	/**
 	 * The description of that web page
@@ -38,6 +40,8 @@ type Summary = {
 	 * 最終リダイレクト先URL
 	 */
 	url?: string;
+
+	$?: CheerioHttpcli.CheerioStaticEx;
 };
 
 export default Summary;

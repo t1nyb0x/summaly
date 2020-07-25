@@ -8,7 +8,7 @@ const entities = new AllHtmlEntities();
 import Summary from './summary';
 import { createInstance } from './client';
 
-export default async (url: URL, lang: string | null = null): Promise<Summary> => {
+export default async (url: URL, lang: string | null = null, withInfo = false): Promise<Summary> => {
 	if (lang && !lang.match(/^[\w-]+(\s*,\s*[\w-]+)*$/)) lang = null;
 
 	const client = createInstance();
@@ -112,7 +112,7 @@ export default async (url: URL, lang: string | null = null): Promise<Summary> =>
 		title = siteName;
 	}
 
-	return {
+	const result = {
 		title,
 		icon,
 		description,
@@ -125,5 +125,11 @@ export default async (url: URL, lang: string | null = null): Promise<Summary> =>
 		sitename: siteName,
 		sensitive,
 		url: landingUrl
-	};
+	} as Summary;
+
+	if (withInfo) {
+		result.$ = $;
+	}
+
+	return result;
 };

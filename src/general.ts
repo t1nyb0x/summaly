@@ -30,7 +30,7 @@ export default async (url: URL, lang: string | null = null, withInfo = false): P
 
 	const $ = res.$;
 
-	const landingUrl = $.documentInfo().url;
+	const landingUrl = new URL($.documentInfo().url);
 
 	let title =
 		$('meta[property="og:title"]').attr('content') ||
@@ -52,7 +52,7 @@ export default async (url: URL, lang: string | null = null, withInfo = false): P
 		$('link[rel="apple-touch-icon image_src"]').attr('href') ||
 		null;
 
-	image = image ? resolve(landingUrl, image) : null;
+	image = image ?  new URL(image, landingUrl.href).href : null;
 
 	const playerUrl =
 		$('meta[property="twitter:player"]').attr('content') ||
@@ -91,7 +91,7 @@ export default async (url: URL, lang: string | null = null, withInfo = false): P
 	let siteName =
 		$('meta[property="og:site_name"]').attr('content') ||
 		$('meta[name="application-name"]').attr('content') ||
-		url.hostname ||
+		landingUrl.hostname ||
 		null;
 
 	siteName = siteName ? entities.decode(siteName) : null;
@@ -101,7 +101,7 @@ export default async (url: URL, lang: string | null = null, withInfo = false): P
 		$('link[rel="icon"]').attr('href') ||
 		'/favicon.ico';
 
-	const icon = favicon ? resolve(landingUrl, favicon) : null;
+	const icon = favicon ? new URL(favicon, landingUrl.href).href : null;
 
 	const sensitive = $('.tweet').attr('data-possibly-sensitive') === 'true';
 
@@ -124,7 +124,7 @@ export default async (url: URL, lang: string | null = null, withInfo = false): P
 		},
 		sitename: siteName,
 		sensitive,
-		url: landingUrl
+		url: landingUrl.href
 	} as Summary;
 
 	if (withInfo) {

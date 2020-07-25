@@ -58,6 +58,8 @@ export default async (url: URL, lang: string | null = null): Promise<Summary> =>
 		$('meta[property="twitter:player"]').attr('content') ||
 		$('meta[name="twitter:player"]').attr('content') ||
 		$('meta[property="og:video"]').attr('content') ||
+		$('meta[property="og:video:secure_url"]').attr('content') ||
+		$('meta[property="og:video:url"]').attr('content') ||
 		null;
 
 	const playerWidth = parseInt(

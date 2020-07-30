@@ -14,8 +14,7 @@
     "server": "node ./built/server/index.js"
   },
   "resolutions": {
-    "lodash": "^4.17.19",
-    "lodash.merge": "^4.6.2"
+    "lodash": "^4.17.19"
   },
   "devDependencies": {
     "@types/debug": "4.1.5",

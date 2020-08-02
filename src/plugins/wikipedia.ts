@@ -1,5 +1,4 @@
-import fetch from 'node-fetch';
-import { httpAgent, httpsAgent } from '../utils/agent';
+import { fetchApi } from '../utils/fetch-api';
 import * as debug from 'debug';
 import summary from '../summary';
 import { decodeEntities } from '../utils/decode-entities';
@@ -19,16 +18,7 @@ export async function summarize(url: URL): Promise<summary> {
 	log(`title is ${title}`);
 	log(`endpoint is ${endpoint}`);
 
-	const body = await fetch(endpoint, {
-		timeout: 10 * 1000,
-		agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent
-	}).then(res => {
-		if (!res.ok) {
-			throw `${res.status} ${res.statusText}`;
-		} else {
-			return res.json();
-		}
-	});
+	const body = await fetchApi(endpoint);
 
 	log(body);
 

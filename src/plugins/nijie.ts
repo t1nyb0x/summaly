@@ -7,40 +7,6 @@ export function test(url: URL): boolean {
 	return /^nijie[.]info$/.test(url.hostname);
 }
 
-export async function summarize(url: URL): Promise<summary> {
-	const s = await general(url, null, true);	// info付き
-
-	const landingUrl = s.url || url.href;
-
-	const m = landingUrl.match(/nijie[.]info[/]view[.]php/);
-
-	if (m && s.$) {
-		try {
-			const $ = s.$;
-
-			const lds = [] as ImageObject[];
-			const ele = $('script[type="application/ld+json"]');
-			ele.each(function() {
-				// 改行がそのまま入っていることがあるのでデコード前にエスケープが必要
-				const text = $(this).text().replace(/\r?\n/g, '\\n');
-				lds.push(JSON.parse(text));
-			});
-
-			const io = lds.filter(isImageObject)[0];
-
-			if (io?.thumbnailUrl) {
-				s.thumbnail = io.thumbnailUrl;
-				s.sensitive = true;
-			}
-		} catch (e) {
-			console.log(`Error in nijie ${e}`);
-		}
-	}
-
-	delete s.$;	// info削除
-	return s;
-}
-
 type ImageObject = {
 	"@context"?: string;
 	"@type": "ImageObject";
@@ -74,3 +40,37 @@ type Person = {
 
 export const isImageObject = (object: any): object is ImageObject =>
 	object['@type'] === 'ImageObject';
+
+export async function summarize(url: URL): Promise<summary> {
+	const s = await general(url, null, true);	// info付き
+
+	const landingUrl = s.url || url.href;
+
+	const m = landingUrl.match(/nijie[.]info[/]view[.]php/);
+
+	if (m && s.$) {
+		try {
+			const $ = s.$;
+
+			const lds = [] as ImageObject[];
+			const ele = $('script[type="application/ld+json"]');
+			ele.each(function() {
+				// 改行がそのまま入っていることがあるのでデコード前にエスケープが必要
+				const text = $(this).text().replace(/\r?\n/g, '\\n');
+				lds.push(JSON.parse(text));
+			});
+
+			const io = lds.filter(isImageObject)[0];
+
+			if (io?.thumbnailUrl) {
+				s.thumbnail = io.thumbnailUrl;
+				s.sensitive = true;
+			}
+		} catch (e) {
+			console.log(`Error in nijie ${e}`);
+		}
+	}
+
+	delete s.$;	// info削除
+	return s;
+}

@@ -1,11 +1,9 @@
 // Pixiv R-18 画像補完プラグイン
 // HUGE THANKS TO TISSUE AND PIXIV.CAT!
 // tissue: https://github.com/shikorism/tissue/blob/134a11ad512e50afe72f4286048dd239da58bfcd/app/MetadataResolver/PixivResolver.php
-import fetch from 'node-fetch';
-import { httpAgent, httpsAgent } from '../utils/agent';
+import { fetchApi } from '../utils/fetch-api';
 import summary from '../summary';
 import general from '../general';
-import { browserUA } from '../client';
 
 export function test(url: URL): boolean {
 	return /^www\.pixiv\.net$/.test(url.hostname);
@@ -26,20 +24,7 @@ export async function summarize(url: URL): Promise<summary> {
 
 	const apiUrl = `https://www.pixiv.net/ajax/illust/${illustId}`;
 
-	const json = await fetch(apiUrl, {
-		timeout: 10 * 1000,
-		agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent,
-		headers: {
-			'User-Agent': browserUA,
-			'Referer': landingUrl
-		}
-	}).then(res => {
-		if (!res.ok) {
-			throw `${res.status} ${res.statusText}`;
-		} else {
-			return res.json();
-		}
-	});
+	const json = await fetchApi(apiUrl, landingUrl);
 
 	const thum = json.body?.urls?.thumb || json.body?.urls?.small || json.body?.urls?.regular;
 

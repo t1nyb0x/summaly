@@ -20,7 +20,7 @@ export async function summarize(url: URL): Promise<summary> {
 
 	if (m) {
 		// 取得出来ていればそのまま
-		if (!s.thumbnail?.match(/favicon/)) return s;
+		if (!s.thumbnail?.match(/favicon|ogp_logo/)) return s;
 
 		const id = m[1];
 		const apiUrl = `https://api.komiflo.com/content/id/${id}`;

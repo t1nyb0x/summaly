@@ -38,7 +38,10 @@ export async function summarize(url: URL): Promise<summary> {
 		$('#productDescription').text() ||
 		$('meta[name="description"]').attr('content');
 
-	const thumbnail = $('#landingImage').attr('src') || null;
+	const thumbnail =
+		$('#landingImage').attr('src') ||
+		$('#ebooksImgBlkFront').attr('src') ||
+		null;
 
 	const playerUrl =
 		$('meta[property="twitter:player"]').attr('content') ||

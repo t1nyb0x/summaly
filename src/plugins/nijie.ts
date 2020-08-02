@@ -18,7 +18,7 @@ export async function summarize(url: URL): Promise<summary> {
 		try {
 			const $ = s.$;
 
-			const lds = [];
+			const lds = [] as ImageObject[];
 			const ele = $('script[type="application/ld+json"]');
 			ele.each(function() {
 				// 改行がそのまま入っていることがあるのでデコード前にエスケープが必要

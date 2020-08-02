@@ -14,7 +14,7 @@ export async function summarize(url: URL): Promise<summary> {
 	const landingUrl = s.url || url.href;
 
 	//#region description
-	if (s.description == null) {
+	if (s.description == null && s.$) {
 		let description = s.$('.field-type-text-with-summary').text() || null;
 		description = decodeEntities(description, 500);
 
@@ -25,7 +25,7 @@ export async function summarize(url: URL): Promise<summary> {
 	//#endregion description
 
 	//#region thumbnail
-	if (s.thumbnail == null) {
+	if (s.thumbnail == null && s.$) {
 		const thum =
 			s.$('#video-player').first().attr('poster') || 
 			s.$('.field-name-field-images a').first().attr('href') ||

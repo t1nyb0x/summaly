@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import { httpAgent, httpsAgent } from '../utils/agent';
 import * as debug from 'debug';
 import summary from '../summary';
-import clip from './../utils/clip';
+import { decodeEntities } from '../utils/decode-entities';
 
 const log = debug('summaly:plugins:wikipedia');
 
@@ -41,7 +41,7 @@ export async function summarize(url: URL): Promise<summary> {
 	return {
 		title: info.title,
 		icon: 'https://wikipedia.org/static/favicon/wikipedia.ico',
-		description: clip(info.extract, 300),
+		description: decodeEntities(info.extract, 300),
 		thumbnail: `https://wikipedia.org/static/images/project-logos/${lang}wiki.png`,
 		player: {
 			url: null,

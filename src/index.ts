@@ -20,7 +20,7 @@ type Options = {
 	/**
 	 * Accept-Language for the request
 	 */
-	lang?: string;
+	lang?: string | null;
 
 	/**
 	 * Whether follow redirects
@@ -32,7 +32,7 @@ type Options = {
 	/**
 	 * Custom Plugins
 	 */
-	plugins?: IPlugin[];
+	plugins?: IPlugin[] | null;
 
 	allowedPlugins?: string[],
 };

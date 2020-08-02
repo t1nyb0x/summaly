@@ -20,8 +20,8 @@ export async function attachImage(summary: Summary) {
 	summary.icon = await convertUrl(summary.icon);
 }
 
-async function convertUrl(url: string) {
-	if (url == null) return url;
+async function convertUrl(url: string | null | undefined) {
+	if (url == null) return null;
 	if (!url.match(/^https?:/)) return url;
 
 	const [path, cleanup] = await new Promise<[string, any]>((res, rej) => {
@@ -36,7 +36,7 @@ async function convertUrl(url: string) {
 
 		const [type] = await detectMine(path);
 
-		if (['image/jpeg', 'image/png', 'image/gif', 'binary/octet-stream'].includes(type)) {
+		if (type && ['image/jpeg', 'image/png', 'image/gif', 'binary/octet-stream'].includes(type)) {
 			const image = await ConvertToJpeg(path, 200, 200);
 			return `data:image/jpeg;base64,${image.data.toString('base64')}`;
 		} else {
@@ -85,10 +85,9 @@ export async function detectMine(path: string) {
 				mime: 'application/octet-stream',
 				ext: null
 			};
-		}
-
 		// 制限を超えている画像は octet-stream にする
-		if (imageSize.wUnits === 'px' && (imageSize.width > 16383 || imageSize.height > 16383)) {
+		} else if (imageSize.wUnits === 'px' && (imageSize.width > 16383 || imageSize.height > 16383)) {
+			
 			type = {
 				mime: 'application/octet-stream',
 				ext: null

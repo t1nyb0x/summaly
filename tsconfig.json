@@ -1,7 +1,6 @@
 {
 	"compilerOptions": {
-		"noEmitOnError": true,
-		"noImplicitAny": false,
+		"noEmitOnError": false,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
 		"declaration": true,
@@ -10,6 +9,7 @@
 		"module": "commonjs",
 		"removeComments": false,
 		"noLib": false,
+		"strictNullChecks": true,
 		"outDir": "built",
 		"rootDir": "src"
 	},

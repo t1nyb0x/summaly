@@ -8,7 +8,7 @@ export default async (url: URL, lang: string | null = null, withInfo = false): P
 
 	const client = createInstance();
 
-	client.set('headers', {
+	(client as any).set('headers', {
 		'Accept-Language': lang
 	});
 

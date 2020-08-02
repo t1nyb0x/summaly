@@ -1,10 +1,5 @@
-import { resolve } from 'url';
-import clip from './utils/clip';
 import cleanupTitle from './utils/cleanup-title';
-
-import { AllHtmlEntities } from 'html-entities';
-const entities = new AllHtmlEntities();
-
+import { decodeEntities } from './utils/decode-entities';
 import Summary from './summary';
 import { createInstance } from './client';
 
@@ -42,7 +37,7 @@ export default async (url: URL, lang: string | null = null, withInfo = false): P
 		throw 'no title';
 	}
 
-	title = clip(entities.decode(title), 100) || null;
+	title = decodeEntities(title, 300);
 
 	let image =
 		$('meta[property="og:image"]').attr('content') ||
@@ -80,9 +75,7 @@ export default async (url: URL, lang: string | null = null, withInfo = false): P
 		$('meta[name="description"]').attr('content') ||
 		null;
 
-	description = description
-		? (clip(entities.decode(description), 300) || null)
-		: null;
+	description = decodeEntities(description, 300);
 
 	if (title === description) {
 		description = null;
@@ -94,7 +87,7 @@ export default async (url: URL, lang: string | null = null, withInfo = false): P
 		landingUrl.hostname ||
 		null;
 
-	siteName = siteName ? entities.decode(siteName) : null;
+	siteName = decodeEntities(siteName, 300);
 
 	const favicon =
 		$('link[rel="shortcut icon"]').attr('href') ||

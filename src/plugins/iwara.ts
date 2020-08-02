@@ -27,7 +27,7 @@ export async function summarize(url: URL): Promise<summary> {
 	//#region thumbnail
 	if (s.thumbnail == null && s.$) {
 		const thum =
-			s.$('#video-player').first().attr('poster') || 
+			s.$('#video-player').first().attr('poster') ||
 			s.$('.field-name-field-images a').first().attr('href') ||
 			null;
 

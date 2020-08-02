@@ -41,7 +41,7 @@ export async function summarize(url: URL): Promise<summary> {
 				}
 			}) as {
 				content?: Content;
-			}
+			};
 
 			const named_imgs = json?.content?.named_imgs || json?.content?.children?.[0]?.named_imgs;
 

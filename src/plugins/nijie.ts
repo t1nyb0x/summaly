@@ -72,5 +72,5 @@ type Person = {
 	"image"?: string;
 };
 
-export const isImageObject= (object: any): object is ImageObject =>
+export const isImageObject = (object: any): object is ImageObject =>
 	object['@type'] === 'ImageObject';

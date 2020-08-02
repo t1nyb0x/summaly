@@ -87,7 +87,7 @@ export async function detectMine(path: string) {
 			};
 		// 制限を超えている画像は octet-stream にする
 		} else if (imageSize.wUnits === 'px' && (imageSize.width > 16383 || imageSize.height > 16383)) {
-			
+
 			type = {
 				mime: 'application/octet-stream',
 				ext: null

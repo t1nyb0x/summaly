@@ -57,6 +57,10 @@ export async function summarize(url: URL): Promise<summary> {
 		$('meta[name="twitter:player:height"]').attr('content') ||
 		'');
 
+	const sensitive =
+		$('#adultWarning').length > 0 ||
+		title?.trim()?.endsWith('[アダルト]');	// Kindle
+
 	return {
 		title: title ? title.trim() : null,
 		icon: 'https://www.amazon.com/favicon.ico',
@@ -68,6 +72,7 @@ export async function summarize(url: URL): Promise<summary> {
 			height: playerHeight || null
 		},
 		sitename: 'Amazon',
+		sensitive,
 		url: u.href
 	};
 }

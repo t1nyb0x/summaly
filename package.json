@@ -10,6 +10,7 @@
   "types": "./built/index.d.ts",
   "scripts": {
     "build": "tsc",
+    "lint": "tslint 'src/**/*.ts'",
     "start": "node ./built/server/index.js",
     "server": "node ./built/server/index.js"
   },
@@ -22,6 +23,7 @@
     "@types/html-entities": "1.2.16",
     "@types/node": "14.0.27",
     "express": "4.17.1",
+		"tslint": "5.20.1",
     "typescript": "3.9.7"
   },
   "dependencies": {

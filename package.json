@@ -15,7 +15,7 @@
     "server": "node ./built/server/index.js"
   },
   "resolutions": {
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "@types/express": "4.17.7",

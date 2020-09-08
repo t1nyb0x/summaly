@@ -11,6 +11,7 @@ export async function fetchApi(apiUrl: string, referer?: string) {
 
 	const json = await fetch(apiUrl, {
 		timeout: 10 * 1000,
+		size: 10 * 1024 * 1024,
 		agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent,
 		headers
 	}).then(res => {

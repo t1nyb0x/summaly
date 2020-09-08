@@ -24,6 +24,7 @@ export async function applySensitive(summary: Summary): Promise<Summary> {
 async function getJson(url: string, referer: string) {
 	const json = await fetch(url, {
 		timeout: 10 * 1000,
+		size: 10 * 1024 * 1024,
 		agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent,
 		headers: {
 			'User-Agent': browserUA,

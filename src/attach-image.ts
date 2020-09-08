@@ -57,6 +57,7 @@ async function fetchUrl(url: string, path: string) {
 
 	const response = await fetch(url, {
 			timeout: 30 * 1000,
+			size: 100 * 1024 * 1024,
 			signal: controller.signal,
 			agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent,
 			headers: {

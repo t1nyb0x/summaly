@@ -1,6 +1,6 @@
 // ニジエ 画像補完プラグイン
 // https://github.com/shikorism/tissue/blob/d69fe6a22a23eb685c4e04db84bb03f2c57311a1/app/MetadataResolver/NijieResolver.php を参考にした
-import summary from '../summary';
+import { Summaly } from '../summaly';
 import general from '../general';
 
 export function test(url: URL): boolean {
@@ -41,7 +41,7 @@ type Person = {
 export const isImageObject = (object: any): object is ImageObject =>
 	object['@type'] === 'ImageObject';
 
-export async function summarize(url: URL): Promise<summary> {
+export async function summarize(url: URL): Promise<Summaly> {
 	const s = await general(url, null, true);	// info付き
 
 	const landingUrl = s.url || url.href;

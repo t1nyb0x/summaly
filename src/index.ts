@@ -5,7 +5,7 @@
 
 import requireAll = require('require-all');
 import tracer from 'trace-redirect';
-import Summary from './summary';
+import { Summaly } from './summaly';
 import IPlugin from './iplugin';
 import general from './general';
 import { attachImage } from './attach-image';
@@ -47,7 +47,7 @@ const defaultOptions = {
 /**
  * Summarize an web page
  */
-export default async (url: string, options?: Options): Promise<Summary> => {
+export default async (url: string, options?: Options): Promise<Summaly> => {
 	const opts = Object.assign(defaultOptions, options);
 
 	const builtinPlugins = Object.keys(_builtinPlugins)

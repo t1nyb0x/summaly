@@ -1,6 +1,6 @@
 import CheerioHttpcli = require("cheerio-httpcli");
 
-type Summary = {
+export type Summaly = {
 	/**
 	 * The description of that web page
 	 */
@@ -43,8 +43,6 @@ type Summary = {
 
 	$?: CheerioHttpcli.CheerioStaticEx;
 };
-
-export default Summary;
 
 export type Player = {
 	/**

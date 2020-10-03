@@ -2,14 +2,14 @@
 // HUGE THANKS TO TISSUE AND PIXIV.CAT!
 // tissue: https://github.com/shikorism/tissue/blob/134a11ad512e50afe72f4286048dd239da58bfcd/app/MetadataResolver/PixivResolver.php
 import { fetchApi } from '../utils/fetch-api';
-import summary from '../summary';
+import { Summaly } from '../summaly';
 import general from '../general';
 
 export function test(url: URL): boolean {
 	return /^www\.pixiv\.net$/.test(url.hostname);
 }
 
-export async function summarize(url: URL): Promise<summary> {
+export async function summarize(url: URL): Promise<Summaly> {
 	const s = await general(url);
 
 	// 画像が取得できていればそのまま

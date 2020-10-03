@@ -1,4 +1,4 @@
-import summary from '../summary';
+import { Summaly } from '../summaly';
 import { createInstance } from '../client';
 
 export function test(url: URL): boolean {
@@ -18,7 +18,7 @@ export function test(url: URL): boolean {
 	url.hostname === 'www.amazon.au';
 }
 
-export async function summarize(url: URL): Promise<summary> {
+export async function summarize(url: URL): Promise<Summaly> {
 	const u = new URL(url.href);
 
 	const m = u.pathname.match(/^\/(?:[^/]+\/)?(?:dp|gp\/product)\/(\w+)/);

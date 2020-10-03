@@ -1,9 +1,9 @@
 import fetch from 'node-fetch';
-import Summary from './summary';
+import { Summaly } from './summaly';
 import { httpAgent, httpsAgent } from './utils/agent';
 import { browserUA } from './client';
 
-export async function applySensitive(summary: Summary): Promise<Summary> {
+export async function applySensitive(summary: Summaly): Promise<Summaly> {
 	if (summary.sensitive) return summary;
 	if (!summary.url) return summary;
 

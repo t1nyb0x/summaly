@@ -1,9 +1,9 @@
 import cleanupTitle from './utils/cleanup-title';
 import { decodeEntities } from './utils/decode-entities';
-import Summary from './summary';
+import { Summaly } from './summaly';
 import { createInstance } from './client';
 
-export default async (url: URL, lang: string | null = null, withInfo = false): Promise<Summary> => {
+export default async (url: URL, lang: string | null = null, withInfo = false): Promise<Summaly> => {
 	if (lang && !lang.match(/^[\w-]+(\s*,\s*[\w-]+)*$/)) lang = null;
 
 	const client = createInstance();
@@ -118,7 +118,7 @@ export default async (url: URL, lang: string | null = null, withInfo = false): P
 		sitename: siteName,
 		sensitive,
 		url: landingUrl.href
-	} as Summary;
+	} as Summaly;
 
 	if (withInfo) {
 		result.$ = $;

@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as stream from 'stream';
 import * as util from 'util';
 import fetch from 'node-fetch';
-import Summary from './summary';
+import { Summaly } from './summaly';
 import * as fileType from 'file-type';
 import isSvg from 'is-svg';
 import { ConvertToJpeg } from './utils/image-processor';
@@ -15,7 +15,7 @@ const pipeline = util.promisify(stream.pipeline);
 
 const probeImageSize = require('probe-image-size');
 
-export async function attachImage(summary: Summary) {
+export async function attachImage(summary: Summaly) {
 	summary.thumbnail = await convertUrl(summary.thumbnail);
 	summary.icon = await convertUrl(summary.icon);
 }

@@ -1,62 +1,55 @@
 import CheerioHttpcli = require("cheerio-httpcli");
 
 export type Summaly = {
-	/**
-	 * The description of that web page
-	 */
+	/** The description of that web page */
 	description: string | null;
 
-	/**
-	 * The url of the icon of that web page
-	 */
+	/** The url of the icon of that web page */
 	icon: string | null;
 
-	/**
-	 * The name of site of that web page
-	 */
+	/** The name of site of that web page */
 	sitename: string | null;
 
-	/**
-	 * The url of the thumbnail of that web page
-	 */
+	/** The url of the thumbnail of that web page */
 	thumbnail: string | null;
 
-	/**
-	 * The player of that web page
-	 */
+	/** The player of that web page */
 	player: Player;
 
-	/**
-	 * The title of that web page
-	 */
+	/** The title of that web page */
 	title: string | null;
 
-	/**
-	 * Possibly sensitive
-	 */
+	/** Possibly sensitive */
 	sensitive?: boolean;
 
-	/**
-	 * 最終リダイレクト先URL
-	 */
-	url?: string;
-
-	$?: CheerioHttpcli.CheerioStaticEx;
+	/** 最終リダイレクト先URL */
+	url: string;
 };
 
+export type SummalyEx = Summaly & {
+	$: CheerioHttpcli.CheerioStaticEx;
+};
+
+export function StripEx(ex: SummalyEx): Summaly {
+	return {
+		description: ex.description,
+		icon: ex.icon,
+		sitename: ex.description,
+		thumbnail: ex.thumbnail,
+		player: ex.player,
+		title: ex.title,
+		sensitive: ex.sensitive,
+		url: ex.url,
+	};
+}
+
 export type Player = {
-	/**
-	 * The url of the player
-	 */
+	/** The url of the player */
 	url: string | null;
 
-	/**
-	 * The width of the player
-	 */
+	/** The width of the player */
 	width: number | null;
 
-	/**
-	 * The height of the player
-	 */
+	/** The height of the player */
 	height: number | null;
 };

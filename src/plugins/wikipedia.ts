@@ -1,6 +1,6 @@
 import { fetchApi } from '../utils/fetch-api';
 import * as debug from 'debug';
-import { Summaly } from '../summaly';
+import { SummalyEx } from '../summaly';
 import { decodeEntities } from '../utils/decode-entities';
 
 const log = debug('summaly:plugins:wikipedia');
@@ -9,7 +9,8 @@ export function test(url: URL): boolean {
 	return /\.wikipedia\.org$/.test(url.hostname);
 }
 
-export async function summarize(url: URL): Promise<Summaly> {
+export async function postProcess(summaly: SummalyEx): Promise<SummalyEx> {
+	const url = new URL(summaly.url);
 	const lang = url.host.split('.')[0];
 	const title = url.pathname.split('/')[2];
 	const endpoint = `https://${lang}.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=${title}`;
@@ -38,6 +39,8 @@ export async function summarize(url: URL): Promise<Summaly> {
 			width: null,
 			height: null
 		},
-		sitename: 'Wikipedia'
+		sitename: 'Wikipedia',
+		url: summaly.url,
+		$: summaly.$,
 	};
 }

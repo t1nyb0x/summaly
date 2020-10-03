@@ -4,8 +4,7 @@
  */
 
 import requireAll = require('require-all');
-import tracer from 'trace-redirect';
-import { Summaly } from './summaly';
+import { StripEx, Summaly } from './summaly';
 import IPlugin from './iplugin';
 import general from './general';
 import { attachImage } from './attach-image';
@@ -56,25 +55,27 @@ export default async (url: string, options?: Options): Promise<Summaly> => {
 
 	const plugins = builtinPlugins.concat(opts.plugins || []);
 
-	const actualUrl = opts.followRedirects ? await tracer(url).catch(() => url) : url;
-
-	const _url = new URL(actualUrl);
-
-	// Find matching plugin
-	const match = plugins.filter(plugin => plugin.test(_url))[0];
+	const _url = new URL(url);
 
 	// Get summary
-	const summary = await (match ? match.summarize : general)(_url, opts.lang);
+	let summary = await general(_url, opts.lang);
 
 	if (summary == null) {
 		throw 'failed summarize';
 	}
 
-	if (opts.attachImage) await attachImage(summary);
+	const landingUrl = summary.url;
 
-	if (summary.url == null) summary.url = actualUrl;
+	// Find matching plugin
+	const match = plugins.filter(plugin => plugin.test(new URL(landingUrl)))[0];
+
+	if (match) {
+		summary = await match.postProcess(summary);
+	}
+
+	if (opts.attachImage) await attachImage(summary);
 
 	await applySensitive(summary).catch(e => console.log(e));
 
-	return summary;
+	return StripEx(summary);
 };

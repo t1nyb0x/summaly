@@ -1,8 +1,8 @@
-import { Summaly } from './summaly';
+import { SummalyEx } from './summaly';
 
 interface IPlugin {
 	test: (url: URL) => boolean;
-	summarize: (url: URL, lang?: string) => Promise<Summaly>;
+	postProcess: (summaly: SummalyEx) => Promise<SummalyEx>;
 }
 
 export default IPlugin;

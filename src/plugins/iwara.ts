@@ -1,6 +1,6 @@
 // Iwara 補完プラグイン
 // https://github.com/shikorism/tissue/blob/54e112fa577315718893c803d16223f9a9a66a01/app/MetadataResolver/IwaraResolver.php を参考にした
-import { Summaly } from '../summaly';
+import { SummalyEx } from '../summaly';
 import general from '../general';
 import { decodeEntities } from '../utils/decode-entities';
 
@@ -8,38 +8,34 @@ export function test(url: URL): boolean {
 	return /^(?:www|ecchi)[.]iwara[.]tv$/.test(url.hostname);
 }
 
-export async function summarize(url: URL): Promise<Summaly> {
-	const s = await general(url, null, true);	// info付き
-
-	const landingUrl = s.url || url.href;
+export async function postProcess(summaly: SummalyEx): Promise<SummalyEx> {
+	const landingUrl = summaly.url;
 
 	//#region description
-	if (s.description == null && s.$) {
-		let description = s.$('.field-type-text-with-summary').text() || null;
+	if (summaly.description == null && summaly.$) {
+		let description = summaly.$('.field-type-text-with-summary').text() || null;
 		description = decodeEntities(description, 500);
 
-		if (description !== s.title) {
-			s.description = description;
+		if (description !== summaly.title) {
+			summaly.description = description;
 		}
 	}
 	//#endregion description
 
 	//#region thumbnail
-	if (s.thumbnail == null && s.$) {
+	if (summaly.thumbnail == null && summaly.$) {
 		const thum =
-			s.$('#video-player').first().attr('poster') ||
-			s.$('.field-name-field-images a').first().attr('href') ||
+			summaly.$('#video-player').first().attr('poster') ||
+			summaly.$('.field-name-field-images a').first().attr('href') ||
 			null;
 
 		const thumbnail = thum ? new URL(thum, landingUrl).href : null;
 
-		s.thumbnail = thumbnail;
+		summaly.thumbnail = thumbnail;
 	}
 	//#endregion thumbnail
 
-	if (landingUrl.match(/[/][/]ecchi[.]/)) s.sensitive = true;
+	if (landingUrl.match(/[/][/]ecchi[.]/)) summaly.sensitive = true;
 
-	delete s.$;	// info削除
-
-	return s;
+	return summaly;
 }

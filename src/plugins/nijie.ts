@@ -1,6 +1,6 @@
 // ニジエ 画像補完プラグイン
 // https://github.com/shikorism/tissue/blob/d69fe6a22a23eb685c4e04db84bb03f2c57311a1/app/MetadataResolver/NijieResolver.php を参考にした
-import { Summaly } from '../summaly';
+import { SummalyEx } from '../summaly';
 import general from '../general';
 
 export function test(url: URL): boolean {
@@ -41,16 +41,14 @@ type Person = {
 export const isImageObject = (object: any): object is ImageObject =>
 	object['@type'] === 'ImageObject';
 
-export async function summarize(url: URL): Promise<Summaly> {
-	const s = await general(url, null, true);	// info付き
-
-	const landingUrl = s.url || url.href;
+export async function postProcess(summaly: SummalyEx): Promise<SummalyEx> {
+	const landingUrl = summaly.url;
 
 	const m = landingUrl.match(/nijie[.]info[/]view[.]php/);
 
-	if (m && s.$) {
+	if (m && summaly.$) {
 		try {
-			const $ = s.$;
+			const $ = summaly.$;
 
 			const lds = [] as ImageObject[];
 			const ele = $('script[type="application/ld+json"]');
@@ -63,14 +61,13 @@ export async function summarize(url: URL): Promise<Summaly> {
 			const io = lds.filter(isImageObject)[0];
 
 			if (io?.thumbnailUrl) {
-				s.thumbnail = io.thumbnailUrl;
-				s.sensitive = true;
+				summaly.thumbnail = io.thumbnailUrl;
+				summaly.sensitive = true;
 			}
 		} catch (e) {
 			console.log(`Error in nijie ${e}`);
 		}
 	}
 
-	delete s.$;	// info削除
-	return s;
+	return summaly;
 }

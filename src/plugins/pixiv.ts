@@ -2,23 +2,20 @@
 // HUGE THANKS TO TISSUE AND PIXIV.CAT!
 // tissue: https://github.com/shikorism/tissue/blob/134a11ad512e50afe72f4286048dd239da58bfcd/app/MetadataResolver/PixivResolver.php
 import { fetchApi } from '../utils/fetch-api';
-import { Summaly } from '../summaly';
-import general from '../general';
+import { SummalyEx } from '../summaly';
 
 export function test(url: URL): boolean {
 	return /^www\.pixiv\.net$/.test(url.hostname);
 }
 
-export async function summarize(url: URL): Promise<Summaly> {
-	const s = await general(url);
-
+export async function postProcess(summaly: SummalyEx): Promise<SummalyEx> {
 	// 画像が取得できていればそのまま
-	if (!s.thumbnail?.match(/pixiv_logo/)) return s;
+	if (!summaly.thumbnail?.match(/pixiv_logo/)) return summaly;
 
-	const landingUrl = s.url || url.href;
+	const landingUrl = summaly.url;
 
 	const m = landingUrl.match(/www\.pixiv\.net\/(?:en\/)?artworks\/(\d+)/);
-	if (!m) return s;
+	if (!m) return summaly;
 
 	const illustId = m[1];
 
@@ -30,9 +27,9 @@ export async function summarize(url: URL): Promise<Summaly> {
 
 	if (typeof thum === 'string') {
 		const thum2 = thum.replace('i.pximg.net', 'i.pixiv.cat');
-		s.thumbnail = thum2;
-		s.sensitive = true;
+		summaly.thumbnail = thum2;
+		summaly.sensitive = true;
 	}
 
-	return s;
+	return summaly;
 }

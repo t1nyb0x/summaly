@@ -1,4 +1,4 @@
-import { Summaly } from '../summaly';
+import { SummalyEx } from '../summaly';
 import { createInstance } from '../client';
 
 export function test(url: URL): boolean {
@@ -18,8 +18,8 @@ export function test(url: URL): boolean {
 	url.hostname === 'www.amazon.au';
 }
 
-export async function summarize(url: URL): Promise<Summaly> {
-	const u = new URL(url.href);
+export async function postProcess(summaly: SummalyEx): Promise<SummalyEx> {
+	const u = new URL(summaly.url);
 
 	const m = u.pathname.match(/^\/(?:[^/]+\/)?(?:dp|gp\/product)\/(\w+)/);
 	if (m) {
@@ -29,8 +29,7 @@ export async function summarize(url: URL): Promise<Summaly> {
 
 	const client = createInstance();
 
-	const res = await client.fetch(u.href);
-	const $ = res.$;
+	const $ = summaly.$;
 
 	const title = $('#title').text();
 
@@ -73,6 +72,7 @@ export async function summarize(url: URL): Promise<Summaly> {
 		},
 		sitename: 'Amazon',
 		sensitive,
-		url: u.href
+		url: u.href,
+		$,
 	};
 }

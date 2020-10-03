@@ -1,8 +1,7 @@
-import { version } from '../package.json';
 import * as client from 'cheerio-httpcli';
 
 client.set('headers', {
-	'User-Agent': `SummalyBot/${version}`
+	'User-Agent': `Twitterbot/1.0`
 });
 client.set('referer', false);
 client.set('timeout', 20000);
@@ -12,4 +11,4 @@ export function createInstance() {
 	return client.fork();
 }
 
-export const browserUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36';
+export const browserUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36';

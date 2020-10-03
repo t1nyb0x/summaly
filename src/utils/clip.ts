@@ -4,7 +4,7 @@ export default function(s: string | null | undefined, max: number): string | nul
 	s = s.trim();
 
 	if (s.length > max) {
-		return s.substr(0, max) + '...';
+		return s.substr(0, max) + '…';
 	} else {
 		return s;
 	}

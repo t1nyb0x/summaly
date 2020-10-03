@@ -34,7 +34,7 @@ export function StripEx(ex: SummalyEx): Summaly {
 	return {
 		description: ex.description,
 		icon: ex.icon,
-		sitename: ex.description,
+		sitename: ex.sitename,
 		thumbnail: ex.thumbnail,
 		player: ex.player,
 		title: ex.title,

@@ -1,14 +1,16 @@
 import summaly from '../';
 import loadConfig from './load-config';
 import * as Fastify from 'fastify';
-import { inspect } from 'util';
+import cors from 'fastify-cors';
+
+const config = loadConfig();
 
 const server = Fastify.fastify({
 	logger: true,
 	exposeHeadRoutes: true,
 });
 
-const config = loadConfig();
+server.register(cors);
 
 function validateUrl(url: string) {
 	const u = new URL(url);

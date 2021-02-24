@@ -1,44 +1,61 @@
-import * as http from 'http';
-import * as Koa from 'koa';
 import summaly from '../';
-import * as cors from '@koa/cors';
 import loadConfig from './load-config';
+import * as Fastify from 'fastify';
+import { inspect } from 'util';
 
-const app = new Koa();
+const server = Fastify.fastify({
+	logger: true,
+	exposeHeadRoutes: true,
+});
 
 const config = loadConfig();
 
-app.use(cors({
-	origin: '*'
-}));
-
-app.use(async ctx => {
-	if (!ctx.query.url) {
-		ctx.status = 400;
-		return;
+function validateUrl(url: string) {
+	const u = new URL(url);
+	if (u.port !== '' && u.port !== '80' && u.port !== '443') {
+		throw `invalid port ${u.port}`;
 	}
+}
 
-	try {
-		const summary = await summaly(ctx.query.url, {
-			lang: ctx.query.lang,
-			followRedirects: false,
-			attachImage: typeof config.attachImage === 'boolean' ? config.attachImage : true,
-			allowedPlugins: config.allowedPlugins || [],
-		});
+server.get<{
+		Querystring: {
+			url?: string;
+			lang?: string;
+		},
+	}>('/url', async (request, reply) => {
+		if (!request.query.url) {
+			reply.code(400).send('no url');
+			return;
+		}
 
-		ctx.body = summary;
-		ctx.set('Cache-Control', 'public, max-age=604800');
-	} catch (e) {
-		console.log(`summaly error: ${e} ${ctx.query.url}`);
-		ctx.status = 500;
-		ctx.set('Cache-Control', 'public, max-age=3600');
-	}
+		try {
+			validateUrl(request.query.url);
+
+			const summary = await summaly(request.query.url, {
+				lang: request.query.lang,
+				followRedirects: false,
+				attachImage: typeof config.attachImage === 'boolean' ? config.attachImage : true,
+				allowedPlugins: config.allowedPlugins || [],
+			});
+
+			reply
+				.header('Cache-Control', 'public, max-age=604800')
+				.send(summary);
+		} catch (e) {
+			console.log(`summaly error: ${e} ${request.query.url}`);
+			reply
+				.code(500)
+				.header('Cache-Control', 'public, max-age=3600')
+				.send('error');
+		}
 });
-
-const server = http.createServer(app.callback());
 
 const port = process.env.PORT || 3030;
 
-server.listen(port);
-
-console.log(`Listening on port ${port}`);
+server.listen(port, '0.0.0.0', (err, address) => {
+	if (err) {
+		console.error(err);
+		process.exit(1);
+	}
+	console.log(`Server listening at ${address}`);
+});

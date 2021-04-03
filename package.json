@@ -15,7 +15,7 @@
 		"server": "node ./built/server/index.js"
 	},
 	"resolutions": {
-		"lodash": "^4.17.20"
+		"lodash": "^4.17.21"
 	},
 	"devDependencies": {
 		"tslint": "6.1.3"

@@ -9,7 +9,7 @@ type Config = {
 export default function () {
 	const path = `${__dirname}/../../server_config.yml`;
 	try {
-		const config = yaml.safeLoad(readFileSync(path, 'utf-8'));
+		const config = yaml.load(readFileSync(path, 'utf-8'));
 		return config as Config;
 	} catch {
 		return {} as Config;

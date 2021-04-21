@@ -15,6 +15,7 @@
 		"server": "node ./built/server/index.js"
 	},
 	"resolutions": {
+		"@types/cheerio": "0.22.18",
 		"lodash": "^4.17.21"
 	},
 	"devDependencies": {

@@ -1,31 +1,15 @@
 import cleanupTitle from './utils/cleanup-title';
 import { decodeEntities } from './utils/decode-entities';
 import { SummalyEx } from './summaly';
-import { createInstance } from './client';
+import { scpaping } from './utils/got';
 
 export default async (url: URL, lang: string | null = null): Promise<SummalyEx> => {
-	if (lang && !lang.match(/^[\w-]+(\s*,\s*[\w-]+)*$/)) lang = null;
-
-	const client = createInstance();
-
-	(client as any).set('headers', {
-		'Accept-Language': lang
-	});
-
-	const res = await client.fetch(url.href).catch((e: any) => {
-		throw `${e.statusCode || e.message}`;
-	});
-
-	const contentType = res.response.headers['content-type'];
-
-	// HTMLじゃなかった場合は中止
-	if (!contentType?.includes('text/html')) {
-		throw `not html ${contentType}`;
-	}
-
+	const res = await scpaping(url.href);
 	const $ = res.$;
+	const landingUrl = new URL(res.response.url);
+	const ip = res.response.ip;
 
-	const landingUrl = new URL($.documentInfo().url);
+	// TODO check ip
 
 	const twitterCard = $('meta[property="twitter:card"]').attr('content');
 

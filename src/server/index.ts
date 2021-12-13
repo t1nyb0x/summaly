@@ -2,6 +2,7 @@ import summaly from '../';
 import loadConfig from './load-config';
 import * as Fastify from 'fastify';
 import cors from 'fastify-cors';
+import { StatusError } from '../utils/status-error';
 
 const config = loadConfig();
 
@@ -45,10 +46,17 @@ server.get<{
 				.send(summary);
 		} catch (e) {
 			console.log(`summaly error: ${e} ${request.query.url}`);
-			reply
-				.code(500)
-				.header('Cache-Control', 'public, max-age=3600')
-				.send('error');
+			if (e instanceof StatusError && e.isPermanentError) {
+				reply
+					.code(400)
+					.header('Cache-Control', 'public, max-age=3600')
+					.send('error');
+			} else {
+				reply
+					.code(500)
+					.header('Cache-Control', 'public, max-age=3600')
+					.send('error');
+			}
 		}
 });
 

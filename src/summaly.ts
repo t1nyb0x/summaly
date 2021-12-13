@@ -1,5 +1,3 @@
-import CheerioHttpcli = require("cheerio-httpcli");
-
 export type Summaly = {
 	/** The description of that web page */
 	description: string | null;
@@ -27,7 +25,7 @@ export type Summaly = {
 };
 
 export type SummalyEx = Summaly & {
-	$: CheerioHttpcli.CheerioStaticEx;
+	$: any
 };
 
 export function StripEx(ex: SummalyEx): Summaly {

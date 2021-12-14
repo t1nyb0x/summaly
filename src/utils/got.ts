@@ -4,6 +4,7 @@ import * as Got from 'got';
 import { StatusError } from './status-error';
 import { detectEncoding, toUtf8 } from './encoding';
 import * as cheerio from 'cheerio';
+const PrivateIp = require('private-ip');
 
 const RESPONSE_TIMEOUT = 20 * 1000;
 const OPERATION_TIMEOUT = 60 * 1000;
@@ -19,6 +20,10 @@ export async function scpaping(url: string) {
 			'user-agent': BOT_UA,
 		},
 	});
+
+	if (response.ip && PrivateIp(response.ip)) {
+		throw new StatusError(`Private IP rejected ${response.ip}`, 400, 'Private IP Rejected');
+	}
 
 	const encoding = detectEncoding(response.headers['content-type'], response.rawBody);
 	const body = toUtf8(response.rawBody, encoding);

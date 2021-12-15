@@ -2,14 +2,11 @@ import * as tmp from 'tmp';
 import * as fs from 'fs';
 import * as stream from 'stream';
 import * as util from 'util';
-import fetch from 'node-fetch';
 import { Summaly } from './summaly';
 import * as fileType from 'file-type';
 import isSvg from 'is-svg';
 import { ConvertToJpeg } from './utils/image-processor';
-import { httpAgent, httpsAgent } from './utils/agent';
-import { AbortController } from 'abort-controller';
-import { browserUA } from './client';
+import { fetchUrl } from './utils/got';
 
 const pipeline = util.promisify(stream.pipeline);
 
@@ -47,31 +44,6 @@ async function convertUrl(url: string | null | undefined) {
 	} finally {
 		cleanup();
 	}
-}
-
-async function fetchUrl(url: string, path: string) {
-	const controller = new AbortController();
-	setTimeout(() => {
-		controller.abort();
-	}, 30 * 1000);
-
-	const response = await fetch(url, {
-			timeout: 30 * 1000,
-			size: 100 * 1024 * 1024,
-			signal: controller.signal,
-			agent: u => u.protocol == 'http:' ? httpAgent : httpsAgent,
-			headers: {
-				'User-Agent': browserUA,
-			}
-		}).then(response => {
-		if (!response.ok) {
-			throw response.status;
-		} else {
-			return response;
-		}
-	});
-
-	await pipeline(response.body, fs.createWriteStream(path));
 }
 
 export async function detectMine(path: string) {

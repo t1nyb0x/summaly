@@ -7,9 +7,6 @@ export default async (url: URL, lang: string | null = null): Promise<SummalyEx> 
 	const res = await scpaping(url.href);
 	const $ = res.$;
 	const landingUrl = new URL(res.response.url);
-	const ip = res.response.ip;
-
-	// TODO check ip
 
 	const twitterCard = $('meta[property="twitter:card"]').attr('content');
 

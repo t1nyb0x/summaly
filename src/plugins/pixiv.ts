@@ -1,7 +1,7 @@
 // Pixiv R-18 画像補完プラグイン
 // HUGE THANKS TO TISSUE AND PIXIV.CAT!
 // tissue: https://github.com/shikorism/tissue/blob/134a11ad512e50afe72f4286048dd239da58bfcd/app/MetadataResolver/PixivResolver.php
-import { fetchApi } from '../utils/fetch-api';
+import { getJson } from '../utils/got';
 import { SummalyEx } from '../summaly';
 
 export function test(url: URL): boolean {
@@ -21,7 +21,7 @@ export async function postProcess(summaly: SummalyEx): Promise<SummalyEx> {
 
 	const apiUrl = `https://www.pixiv.net/ajax/illust/${illustId}`;
 
-	const json = await fetchApi(apiUrl, landingUrl);
+	const json = await getJson(apiUrl, landingUrl);
 
 	const thum = json.body?.urls?.thumb || json.body?.urls?.small || json.body?.urls?.regular;
 

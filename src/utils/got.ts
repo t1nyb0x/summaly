@@ -7,6 +7,7 @@ import * as cheerio from 'cheerio';
 import * as fs from 'fs';
 import * as stream from 'stream';
 import * as util from 'util';
+import { browserUA } from '../client';
 const PrivateIp = require('private-ip');
 
 const pipeline = util.promisify(stream.pipeline);
@@ -24,6 +25,7 @@ export async function scpaping(url: string) {
 			'accept': 'text/html',
 			'user-agent': BOT_UA,
 		},
+		typeFilter: /^text\/html/,
 	});
 
 	if (response.ip && PrivateIp(response.ip)) {
@@ -41,7 +43,21 @@ export async function scpaping(url: string) {
 	};
 }
 
-async function getResponse(args: { url: string, method: 'GET' | 'POST', body?: string, headers: Record<string, string> }) {
+export async function getJson(url: string, referer: string) {
+	const res = await getResponse({
+		url,
+		method: 'GET',
+		headers: {
+			'accept': 'application/json, */*',
+			'user-agent': browserUA,
+			referer,
+		}
+	});
+
+	return await JSON.parse(res.body);
+}
+
+async function getResponse(args: { url: string, method: 'GET' | 'POST', body?: string, headers: Record<string, string>, typeFilter?: RegExp }) {
 	const timeout = RESPONSE_TIMEOUT;
 	const operationTimeout = OPERATION_TIMEOUT;
 
@@ -66,7 +82,7 @@ async function getResponse(args: { url: string, method: 'GET' | 'POST', body?: s
 		retry: 0,
 	});
 
-	return await receiveResponce({ req, typeFilter: /^text\/html/ });
+	return await receiveResponce({ req, typeFilter: args.typeFilter });
 }
 
 async function receiveResponce<T>(args: { req: Got.CancelableRequest<Got.Response<T>>, typeFilter?: RegExp }) {

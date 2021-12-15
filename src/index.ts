@@ -75,7 +75,5 @@ export default async (url: string, options?: Options): Promise<Summaly> => {
 
 	if (opts.attachImage) await attachImage(summary);
 
-	await applySensitive(summary).catch(e => console.log(e));
-
 	return StripEx(summary);
 };

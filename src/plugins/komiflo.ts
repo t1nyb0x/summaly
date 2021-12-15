@@ -1,8 +1,7 @@
 // Komiflo 画像補完プラグイン
 // https://github.com/shikorism/tissue/blob/54e112fa577315718893c803d16223f9a9a66a01/app/MetadataResolver/KomifloResolver.php を参考にした
 import { SummalyEx } from '../summaly';
-import general from '../general';
-import { fetchApi } from '../utils/fetch-api';
+import { getJson } from '../utils/got';
 
 export function test(url: URL): boolean {
 	return /^komiflo[.]com$/.test(url.hostname);
@@ -22,7 +21,7 @@ export async function postProcess(summaly: SummalyEx): Promise<SummalyEx> {
 		const apiUrl = `https://api.komiflo.com/content/id/${id}`;
 
 		try {
-			const json = (await fetchApi(apiUrl, landingUrl)) as {
+			const json = (await getJson(apiUrl, landingUrl)) as {
 				content?: Content;
 			};
 

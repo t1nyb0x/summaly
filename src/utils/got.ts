@@ -1,12 +1,13 @@
-import { httpAgent, httpsAgent } from './agent';
+import * as fs from 'fs';
+import * as stream from 'stream';
+import * as util from 'util';
+import * as http from 'http';
+import * as https from 'https';
 import got from 'got';
 import * as Got from 'got';
 import { StatusError } from './status-error';
 import { detectEncoding, toUtf8 } from './encoding';
 import * as cheerio from 'cheerio';
-import * as fs from 'fs';
-import * as stream from 'stream';
-import * as util from 'util';
 import { browserUA } from '../client';
 const PrivateIp = require('private-ip');
 
@@ -17,7 +18,12 @@ const OPERATION_TIMEOUT = 60 * 1000;
 const MAX_RESPONSE_SIZE = 10 * 1024 * 1024;
 const BOT_UA = `Twitterbot/1.0`;
 
-export async function scpaping(url: string) {
+type Agents = {
+	http: http.Agent,
+	https: https.Agent,
+};
+
+export async function scpaping(url: string, opts?: { agent?: Agents }) {
 	const response = await getResponse({
 		url,
 		method: 'GET',
@@ -26,6 +32,7 @@ export async function scpaping(url: string) {
 			'user-agent': BOT_UA,
 		},
 		typeFilter: /^text\/html/,
+		agent: opts?.agent,
 	});
 
 	if (response.ip && PrivateIp(response.ip)) {
@@ -57,7 +64,7 @@ export async function getJson(url: string, referer: string) {
 	return await JSON.parse(res.body);
 }
 
-async function getResponse(args: { url: string, method: 'GET' | 'POST', body?: string, headers: Record<string, string>, typeFilter?: RegExp }) {
+async function getResponse(args: { url: string, method: 'GET' | 'POST', body?: string, headers: Record<string, string>, typeFilter?: RegExp, agent?: Agents }) {
 	const timeout = RESPONSE_TIMEOUT;
 	const operationTimeout = OPERATION_TIMEOUT;
 
@@ -74,10 +81,7 @@ async function getResponse(args: { url: string, method: 'GET' | 'POST', body?: s
 			send: timeout,
 			request: operationTimeout,	// whole operation timeout
 		},
-		agent: {
-			http: httpAgent,
-			https: httpsAgent,
-		},
+		agent: args.agent,
 		http2: false,
 		retry: 0,
 	});
@@ -125,7 +129,7 @@ async function receiveResponce<T>(args: { req: Got.CancelableRequest<Got.Respons
 	return res;
 }
 
-export async function fetchUrl(url: string, path: string) {
+export async function fetchUrl(url: string, path: string, opts?: { agent?: Agents }) {
 	const timeout = RESPONSE_TIMEOUT;
 	const operationTimeout = RESPONSE_TIMEOUT;
 	const maxSize = MAX_RESPONSE_SIZE;
@@ -143,6 +147,7 @@ export async function fetchUrl(url: string, path: string) {
 			send: timeout,
 			request: operationTimeout,	// whole operation timeout
 		},
+		agent: opts?.agent,
 		retry: 0,	// デフォルトでリトライするようになってる
 	}).on('response', (res: Got.Response) => {
 		if (res.ip && PrivateIp(res.ip)) {

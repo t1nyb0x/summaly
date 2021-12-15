@@ -1,11 +1,11 @@
 {
 	"name": "summaly",
-	"version": "2.4.0",
+	"version": "1.0.0-mei",
 	"description": "Get web page's summary",
-	"author": "syuilo <i@syuilo.com>",
+	"author": "mei23 <m@m544.net>",
 	"license": "MIT",
-	"repository": "https://github.com/syuilo/summaly.git",
-	"bugs": "https://github.com/syuilo/summaly/issues",
+	"repository": "https://github.com/mei23/summaly.git",
+	"bugs": "https://github.com/mei23/summaly/issues",
 	"main": "./built/index.js",
 	"types": "./built/index.d.ts",
 	"scripts": {

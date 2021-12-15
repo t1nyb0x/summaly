@@ -18,8 +18,9 @@ fork of [summaly](https://github.com/syuilo/summaly)
 - followRedirects無効でリダイレクトされた場合でもリダイレクト先URLを返すように
 - 特定サービスでの`sensitive`フラグの出し分け
 - 依存関係などを最新化
-- request => node-fetch
+- request => node-fetch => got
 - プラグインはリダイレクト後のURL基準で動かすように
+- Private IP の拒否
 
 ### Install and build
 ```

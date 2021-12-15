@@ -8,7 +8,6 @@ import { StripEx, Summaly } from './summaly';
 import IPlugin from './iplugin';
 import general from './general';
 import { attachImage } from './attach-image';
-import { applySensitive } from './apply-sensitive';
 
 // Load builtin plugins
 const _builtinPlugins = requireAll({

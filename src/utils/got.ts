@@ -7,6 +7,7 @@ import { StatusError } from './status-error';
 import { detectEncoding, toUtf8 } from './encoding';
 import * as cheerio from 'cheerio';
 import { browserUA } from '../client';
+import { agent } from './agent';
 const PrivateIp = require('private-ip');
 
 const pipeline = util.promisify(stream.pipeline);
@@ -73,6 +74,7 @@ async function getResponse(args: { url: string, method: 'GET' | 'POST', body?: s
 			send: timeout,
 			request: operationTimeout,	// whole operation timeout
 		},
+		agent: agent,
 		http2: false,
 		retry: 0,
 	});
@@ -138,6 +140,8 @@ export async function fetchUrl(url: string, path: string) {
 			send: timeout,
 			request: operationTimeout,	// whole operation timeout
 		},
+		agent: agent,
+		http2: false,
 		retry: 0,	// デフォルトでリトライするようになってる
 	}).on('response', (res: Got.Response) => {
 		if (res.ip && PrivateIp(res.ip)) {

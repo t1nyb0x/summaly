@@ -39,7 +39,7 @@ export async function scpaping(url: string, opts?: { agent?: Agents }) {
 		throw new StatusError(`Private IP rejected ${response.ip}`, 400, 'Private IP Rejected');
 	}
 
-	const encoding = detectEncoding(response.headers['content-type'], response.rawBody);
+	const encoding = detectEncoding(response.rawBody);
 	const body = toUtf8(response.rawBody, encoding);
 	const $ = cheerio.load(body);
 

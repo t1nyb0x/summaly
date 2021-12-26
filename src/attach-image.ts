@@ -1,14 +1,9 @@
 import * as tmp from 'tmp';
 import * as fs from 'fs';
-import * as stream from 'stream';
-import * as util from 'util';
 import { Summaly } from './summaly';
 import * as fileType from 'file-type';
-import isSvg from 'is-svg';
 import { ConvertToJpeg } from './utils/image-processor';
 import { fetchUrl } from './utils/got';
-
-const pipeline = util.promisify(stream.pipeline);
 
 const probeImageSize = require('probe-image-size');
 
@@ -33,7 +28,7 @@ async function convertUrl(url: string | null | undefined) {
 
 		const [type] = await detectMine(path);
 
-		if (type && ['image/jpeg', 'image/png', 'image/gif', 'binary/octet-stream'].includes(type)) {
+		if (type && ['image/jpeg', 'image/png', 'image/gif'].includes(type)) {
 			const image = await ConvertToJpeg(path, 200, 200);
 			return `data:image/jpeg;base64,${image.data.toString('base64')}`;
 		} else {
@@ -49,7 +44,7 @@ async function convertUrl(url: string | null | undefined) {
 export async function detectMine(path: string) {
 	let type = await detectType(path);
 
-	if (['image/jpeg', 'image/png', 'image/gif'].includes(type.mime)) {
+	if (['image/jpeg', 'image/png', 'image/apng', 'image/gif'].includes(type.mime)) {
 		const imageSize = await detectImageSize(path).catch(() => null);
 
 		// うまく判定できない画像は octet-stream にする
@@ -86,25 +81,9 @@ async function detectType(path: string) {
 	readable.destroy();
 
 	if (type) {
-		// XMLはSVGかもしれない
-		if (type.mime === 'application/xml' && checkSvg(path)) {
-			return {
-				mime: 'image/svg+xml',
-				ext: 'svg'
-			};
-		}
-
 		return {
 			mime: type.mime,
 			ext: type.ext
-		};
-	}
-
-	// 種類が不明でもSVGかもしれない
-	if (checkSvg(path)) {
-		return {
-			mime: 'image/svg+xml',
-			ext: 'svg'
 		};
 	}
 
@@ -135,14 +114,4 @@ async function detectImageSize(path: string) {
 	readable.destroy();
 
 	return imageSize;
-}
-
-function checkSvg(path: string) {
-	try {
-		const size = fs.statSync(path).size;
-		if (size > 1 * 1024 * 1024) return false;
-		return isSvg(fs.readFileSync(path));
-	} catch {
-		return false;
-	}
 }

@@ -4,6 +4,9 @@ summaly
 fork of [summaly](https://github.com/syuilo/summaly)
 
 オリジナルとの違いは
+
+ほぼ全てが違う、バージョンはあてにならない。
+
 - 画像をData URIで添付する＆リサイズもするオプションを追加
 - キャッシュの調整
 - エラーメッセージの調整

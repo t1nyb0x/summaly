@@ -17,10 +17,16 @@ const OPERATION_TIMEOUT = 60 * 1000;
 const MAX_RESPONSE_SIZE = 10 * 1024 * 1024;
 const BOT_UA = `Twitterbot/1.0`;
 
+const NOT_BOT_UA = [
+	'www.sankei.com',
+];
+
 export async function scpaping(url: string, opts?: { lang?: string; }) {
+	const u = new URL(url);
+
 	const headers = {
 		'accept': 'text/html',
-		'user-agent': BOT_UA,
+		'user-agent': NOT_BOT_UA.includes(u.hostname) ? browserUA : BOT_UA,
 	};
 
 	if (opts?.lang) headers['accept-language'] = opts.lang;

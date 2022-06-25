@@ -25,7 +25,7 @@ export async function scpaping(url: string, opts?: { lang?: string; }) {
 	const u = new URL(url);
 
 	const headers = {
-		'accept': 'text/html',
+		'accept': 'text/html, application/xhtml+xml',
 		'user-agent': NOT_BOT_UA.includes(u.hostname) ? browserUA : BOT_UA,
 	};
 
@@ -35,7 +35,7 @@ export async function scpaping(url: string, opts?: { lang?: string; }) {
 		url,
 		method: 'GET',
 		headers,
-		typeFilter: /^text\/html/,
+		typeFilter: /^(text\/html|application\/xhtml\+xml)/,
 	});
 
 	if (response.ip && PrivateIp(response.ip)) {

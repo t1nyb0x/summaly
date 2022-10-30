@@ -1,7 +1,6 @@
 import summaly from '../';
 import loadConfig from './load-config';
-//import * as h3 from 'h3';
-const h3 = require('h3');
+import * as h3 from 'h3';
 import { createServer } from 'http';
 import { Type, validateQuery } from 'h3-typebox';
 import { StatusError } from '../utils/status-error';

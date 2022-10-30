@@ -9,7 +9,7 @@
 	"main": "./built/index.js",
 	"types": "./built/index.d.ts",
 	"scripts": {
-		"build": "tsc || echo done.",
+		"build": "tsc",
 		"lint": "tslint 'src/**/*.ts'",
 		"start": "node ./built/server/index.js",
 		"server": "node ./built/server/index.js"

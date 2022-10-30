@@ -10,6 +10,7 @@
 		"removeComments": false,
 		"noLib": false,
 		"strictNullChecks": true,
+    "skipLibCheck": true,
 		"outDir": "built",
 		"rootDir": "src"
 	},

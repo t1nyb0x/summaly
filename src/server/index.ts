@@ -1,17 +1,12 @@
 import summaly from '../';
 import loadConfig from './load-config';
-import * as Fastify from 'fastify';
-import cors from 'fastify-cors';
+//import * as h3 from 'h3';
+const h3 = require('h3');
+import { createServer } from 'http';
+import { Type, validateQuery } from 'h3-typebox';
 import { StatusError } from '../utils/status-error';
 
 const config = loadConfig();
-
-const server = Fastify.fastify({
-	logger: true,
-	exposeHeadRoutes: true,
-});
-
-server.register(cors);
 
 function validateUrl(url: string) {
 	const u = new URL(url);
@@ -20,52 +15,49 @@ function validateUrl(url: string) {
 	}
 }
 
-server.get<{
-		Querystring: {
-			url?: string;
-			lang?: string;
-		},
-	}>('/url', async (request, reply) => {
-		if (!request.query.url) {
-			reply.code(400).send('no url');
-			return;
-		}
+const app = h3.createApp();
+const router = h3.createRouter();
 
-		try {
-			validateUrl(request.query.url);
-
-			const summary = await summaly(request.query.url, {
-				lang: request.query.lang,
-				followRedirects: false,
-				attachImage: typeof config.attachImage === 'boolean' ? config.attachImage : true,
-				allowedPlugins: config.allowedPlugins || [],
-			});
-
-			reply
-				.header('Cache-Control', 'public, max-age=604800')
-				.send(summary);
-		} catch (e) {
-			console.log(`summaly error: ${e} ${request.query.url}`);
-			if (e instanceof StatusError && e.isPermanentError) {
-				reply
-					.code(400)
-					.header('Cache-Control', 'public, max-age=3600')
-					.send('error');
-			} else {
-				reply
-					.code(500)
-					.header('Cache-Control', 'public, max-age=3600')
-					.send('error');
-			}
-		}
+const validater = Type.Object({
+	url: Type.String(),
+	lang: Type.Optional(Type.String()),
 });
 
-const port = process.env.PORT || 3030;
+router.get('/url', h3.eventHandler(async event => {
+	const query = validateQuery(event, validater);
 
-server.listen(port, '0.0.0.0', (err, address) => {
-	if (err) {
-		console.error(err);
-		process.exit(1);
+	try {
+		validateUrl(query.url);
+
+		const summary = await summaly(query.url, {
+			lang: query.lang,
+			followRedirects: false,
+			attachImage: typeof config.attachImage === 'boolean' ? config.attachImage : true,
+			allowedPlugins: config.allowedPlugins || [],
+		});
+
+		h3.setResponseHeader(event, 'Cache-Control', 'public, max-age=604800');
+		return summary;
+	} catch (e) {
+		console.log(`summaly error: ${e} ${query.url}`);
+		if (e instanceof StatusError && e.isPermanentError) {
+			event.res.statusCode = 400;
+		} else {
+			event.res.statusCode = 500;
+		}
+		h3.setResponseHeader(event, 'Content-Type', 'text/plain');
+		h3.setResponseHeader(event, 'Cache-Control', 'public, max-age=3600');
+		return 'error';
 	}
-	console.log(`Server listening at ${address}`);
+}));
+
+app.use(router);
+
+const server = createServer(h3.toNodeListener(app));
+
+server.on('error', err => {
+	console.error(err);
+	process.exit(1);
 });
+
+server.listen(process.env.PORT || 3030);

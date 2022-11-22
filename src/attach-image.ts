@@ -28,7 +28,7 @@ async function convertUrl(url: string | null | undefined) {
 
 		const [type] = await detectMine(path);
 
-		if (type && ['image/jpeg', 'image/png', 'image/gif'].includes(type)) {
+		if (type && ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/avif'].includes(type)) {
 			const image = await ConvertToJpeg(path, 200, 200);
 			return `data:image/jpeg;base64,${image.data.toString('base64')}`;
 		} else {

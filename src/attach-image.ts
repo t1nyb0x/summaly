@@ -34,9 +34,9 @@ async function convertUrl(url: string | null | undefined, width = 128, heigth = 
 		if (type && ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/avif'].includes(type)) {
 			const image = await ConvertToWebp(path, width, heigth);
 			return `data:image/webp;base64,${image.data.toString('base64')}`;
-		} else {
-			return url;
 		}
+
+		return url;
 	} catch (e) {
 		return url;
 	} finally {
@@ -45,11 +45,6 @@ async function convertUrl(url: string | null | undefined, width = 128, heigth = 
 }
 
 export async function detectMine(path: string) {
-	const fileSize = await detectFileSize(path);
-	if (fileSize === 0) {
-		return 'application/octet-stream';
-	}
-
 	const imageSize = await detectImageSize(path).catch(() => null);
 
 	// うまく判定できない画像は octet-stream にする
@@ -59,15 +54,6 @@ export async function detectMine(path: string) {
 	if (imageSize.wUnits === 'px' && (imageSize.width > 16383 || imageSize.height > 16383)) return 'application/octet-stream';
 
 	return imageSize.mime;
-}
-
-async function detectFileSize(path: string) {
-	return new Promise<number>((res, rej) => {
-		fs.stat(path, (err, stats) => {
-			if (err) return rej(err);
-			res(stats.size);
-		});
-	});
 }
 
 async function detectImageSize(path: string) {

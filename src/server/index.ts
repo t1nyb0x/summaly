@@ -40,9 +40,9 @@ router.get('/url', h3.eventHandler(async event => {
 	} catch (e) {
 		console.log(`summaly error: ${e} ${query.url}`);
 		if (e instanceof StatusError && e.isPermanentError) {
-			event.res.statusCode = 400;
+			h3.setResponseStatus(event, 400);
 		} else {
-			event.res.statusCode = 500;
+			h3.setResponseStatus(event, 500);
 		}
 		h3.setResponseHeader(event, 'Content-Type', 'text/plain');
 		h3.setResponseHeader(event, 'Cache-Control', 'public, max-age=3600');

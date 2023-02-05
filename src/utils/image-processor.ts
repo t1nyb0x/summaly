@@ -6,27 +6,21 @@ export type IImage = {
 	type: string;
 };
 
-/**
- * Convert to JPEG
- *   with resize, remove metadata, resolve orientation, stop animation
- */
-export async function ConvertToJpeg(path: string, width: number, height: number): Promise<IImage> {
+export async function ConvertToWebp(path: string, width: number, height: number): Promise<IImage> {
 	const data = await sharp(path)
 		.resize(width, height, {
 			fit: 'inside',
 			withoutEnlargement: true
 		})
 		.rotate()
-		.jpeg({
+		.webp({
 			quality: 85,
-			progressive: true,
-			mozjpeg: true,
 		})
 		.toBuffer();
 
 	return {
 		data,
-		ext: 'jpg',
-		type: 'image/jpeg'
+		ext: 'webp',
+		type: 'image/webp'
 	};
 }

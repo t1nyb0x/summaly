@@ -13,7 +13,11 @@ export async function attachImage(summary: Summaly) {
 
 async function convertUrl(url: string | null | undefined) {
 	if (url == null) return null;
-	if (!url.match(/^https?:/)) return url;
+
+	const u = new URL(url);
+	if (!u.protocol.match(/^https?:$/) || u.hostname === 'unix') {
+		return null;
+	}
 
 	const [path, cleanup] = await new Promise<[string, any]>((res, rej) => {
 		tmp.file((e, path, fd, cleanup) => {

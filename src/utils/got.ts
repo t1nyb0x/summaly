@@ -137,6 +137,11 @@ export async function fetchUrl(url: string, path: string) {
 	const operationTimeout = RESPONSE_TIMEOUT;
 	const maxSize = MAX_RESPONSE_SIZE;
 
+	const u = new URL(url);
+	if (!u.protocol.match(/^https?:$/) || u.hostname === 'unix') {
+		throw new StatusError('Invalid protocol', 400);
+	}
+
 	const req = got.stream(url, {
 		headers: {
 			Accept: '*/*',

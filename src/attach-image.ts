@@ -36,6 +36,10 @@ async function convertUrl(url: string | null | undefined, width = 128, heigth = 
 			return `data:image/webp;base64,${image.data.toString('base64')}`;
 		}
 
+		if (type && ['image/x-icon'].includes(type)) {
+			return `data:image/x-icon;base64,${(await fs.promises.readFile(path)).toString('base64')}`;
+		}
+
 		return url;
 	} catch (e) {
 		return url;

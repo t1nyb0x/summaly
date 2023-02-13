@@ -7,6 +7,7 @@ import requireAll = require('require-all');
 import { StripEx, Summaly } from './summaly';
 import IPlugin from './iplugin';
 import general from './general';
+import { sanitizeUrl } from './utils/sanitize-url';
 
 // Load builtin plugins
 const _builtinPlugins = requireAll({
@@ -58,6 +59,11 @@ export default async (url: string, options?: Options): Promise<Summaly> => {
 	if (preMatch && preMatch.process) {
 		const summary = await preMatch.process(_url);
 		if (summary == null) throw 'failed summarize';
+
+		if (summary.player) summary.player.url = sanitizeUrl(summary.player.url);
+		summary.icon = sanitizeUrl(summary.icon);
+		summary.thumbnail = sanitizeUrl(summary.thumbnail);
+
 		return summary;
 	} else {
 		let summary = await general(_url, opts.lang);
@@ -67,6 +73,11 @@ export default async (url: string, options?: Options): Promise<Summaly> => {
 		if (match && match.postProcess) {
 			summary = await match.postProcess(summary);
 		}
+
+		if (summary.player) summary.player.url = sanitizeUrl(summary.player.url);
+		summary.icon = sanitizeUrl(summary.icon);
+		summary.thumbnail = sanitizeUrl(summary.thumbnail);
+
 		return StripEx(summary);
 	}
 };

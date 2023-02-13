@@ -20,7 +20,7 @@ yarn server
 
 ### To use server
 ```
-http://localhost:3030/?url=https://example.com
+http://localhost:3030/url?url=https://example.com
 ```
 
 ### Returns

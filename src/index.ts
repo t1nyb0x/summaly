@@ -3,16 +3,11 @@
  * https://github.com/syuilo/summaly
  */
 
-import requireAll = require('require-all');
 import { StripEx, Summaly } from './summaly';
 import IPlugin from './iplugin';
 import general from './general';
 import { sanitizeUrl } from './utils/sanitize-url';
-
-// Load builtin plugins
-const _builtinPlugins = requireAll({
-	dirname: __dirname + '/plugins'
-}) as { [key: string]: IPlugin };
+import { resolve } from 'path';
 
 type Options = {
 	/**
@@ -45,11 +40,17 @@ const defaultOptions = {
 export default async (url: string, options?: Options): Promise<Summaly> => {
 	const opts = Object.assign(defaultOptions, options);
 
-	const builtinPlugins = Object.keys(_builtinPlugins)
-		.filter(key => opts.allowedPlugins == null || opts.allowedPlugins.includes(key))
-		.map(key => _builtinPlugins[key]);
+	const plugins = [] as IPlugin[];
 
-	const plugins = builtinPlugins.concat(opts.plugins || []);
+	for (const key of opts.allowedPlugins || []) {
+		try {
+			const p = require(resolve(__dirname, 'plugins', key));
+			plugins.push(p);
+			console.log(`Plugin loaded ${key}`);
+		} catch (e) {
+			console.warn(`Plugin load failed ${key}`);
+		}
+	}
 
 	const _url = new URL(url);
 

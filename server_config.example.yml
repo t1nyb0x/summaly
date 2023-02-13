@@ -1,7 +1,5 @@
 # 使用するプラグイン (適宜コメントアウト)
 allowedPlugins:
-#  - wikipedia
-#  - amazon
 #  - pixiv
 #  - nijie
 #  - iwara

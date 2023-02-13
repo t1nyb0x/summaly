@@ -1,3 +1,4 @@
+// 高速Twitterプラグイン
 import { getJson } from '../utils/got';
 import { Summaly } from '../summaly';
 

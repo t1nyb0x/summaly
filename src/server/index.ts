@@ -31,7 +31,6 @@ router.get('/url', h3.eventHandler(async event => {
 		const summary = await summaly(query.url, {
 			lang: query.lang,
 			followRedirects: false,
-			attachImage: typeof config.attachImage === 'boolean' ? config.attachImage : true,
 			allowedPlugins: config.allowedPlugins || [],
 		});
 

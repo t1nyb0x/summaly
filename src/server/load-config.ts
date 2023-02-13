@@ -2,7 +2,6 @@ import { readFileSync } from 'fs';
 import * as yaml from 'js-yaml';
 
 type Config = {
-	attachImage?: boolean;
 	allowedPlugins?: string[];
 };
 

@@ -7,7 +7,6 @@ import requireAll = require('require-all');
 import { StripEx, Summaly } from './summaly';
 import IPlugin from './iplugin';
 import general from './general';
-import { attachImage } from './attach-image';
 
 // Load builtin plugins
 const _builtinPlugins = requireAll({
@@ -25,8 +24,6 @@ type Options = {
 	 */
 	followRedirects?: boolean;
 
-	attachImage?: boolean;
-
 	/**
 	 * Custom Plugins
 	 */
@@ -38,7 +35,6 @@ type Options = {
 const defaultOptions = {
 	lang: null,
 	followRedirects: true,
-	attachImage: true,
 	plugins: null
 } as Options;
 
@@ -62,7 +58,6 @@ export default async (url: string, options?: Options): Promise<Summaly> => {
 	if (preMatch && preMatch.process) {
 		const summary = await preMatch.process(_url);
 		if (summary == null) throw 'failed summarize';
-		if (opts.attachImage) await attachImage(summary);
 		return summary;
 	} else {
 		let summary = await general(_url, opts.lang);
@@ -72,7 +67,6 @@ export default async (url: string, options?: Options): Promise<Summaly> => {
 		if (match && match.postProcess) {
 			summary = await match.postProcess(summary);
 		}
-		if (opts.attachImage) await attachImage(summary);
 		return StripEx(summary);
 	}
 };

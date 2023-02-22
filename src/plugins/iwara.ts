@@ -1,7 +1,6 @@
 // Iwara 補完プラグイン
 // https://github.com/shikorism/tissue/blob/54e112fa577315718893c803d16223f9a9a66a01/app/MetadataResolver/IwaraResolver.php を参考にした
 import { SummalyEx } from '../summaly';
-import general from '../general';
 import { decodeEntities } from '../utils/decode-entities';
 
 export function test(url: URL): boolean {

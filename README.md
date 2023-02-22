@@ -34,26 +34,27 @@ cp server_config.example.yml server_config.yml
 
 ## プラグイン
 
-## twitter - 高速Twitterプラグイン
-Twitterの取得が高速化されます
-```
-オリジナル: 1230ms
-本プラグイン: 182ms (7倍速い)
-```
+## twitter
+Twitterの取得が高速化されます。  
 公式埋め込みウィジェットの取得先を独自に叩いて、CDNキャッシュされたTweetエンティティのようなものを取得しています。  
-非公式APIよりは将来的にブロックされる可能性は低いと思われる。
+必要によりsensitiveフラグを付与します。
 
 ## youtube - 高速YouTubeプラグイン
-
-YouTubeの取得が高速化されます
-```
-オリジナル: 2160ms
-本プラグイン: 117ms (18倍速い)
-```
+YouTubeの取得が高速化されます。  
 公式のoEmbed endpointを叩いています。  
-descriptionは取得出来なくなります。  
-ただし、YouTubeの一覧ページでさえdescriptionは見れない状況のためさほどUX的な影響は少ないものと思われます。  
-最近のYouTubeはタイトルが長めの傾向が強いため、表示時にタイトルを長めに表示出来るようにするといいかもしれません。
+descriptionは取得出来なくなります。
+
+## nijie
+画像が補完されます。  
+常にsensitiveになります。
+
+## iwara
+画像が補完されます。  
+必要によりsensitiveフラグを付与します。
+
+## komiflo
+画像が補完されます。  
+必要によりsensitiveフラグを付与します。
 
 ## Returns
 

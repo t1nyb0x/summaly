@@ -46,9 +46,8 @@ export default async (url: string, options?: Options): Promise<Summaly> => {
 		try {
 			const p = require(resolve(__dirname, 'plugins', key));
 			plugins.push(p);
-			console.log(`Plugin loaded ${key}`);
 		} catch (e) {
-			console.warn(`Plugin load failed ${key}`);
+			//
 		}
 	}
 

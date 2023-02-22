@@ -39,7 +39,7 @@ Twitterの取得が高速化されます。
 公式埋め込みウィジェットの取得先を独自に叩いて、CDNキャッシュされたTweetエンティティのようなものを取得しています。  
 必要によりsensitiveフラグを付与します。
 
-## youtube - 高速YouTubeプラグイン
+## youtube
 YouTubeの取得が高速化されます。  
 公式のoEmbed endpointを叩いています。  
 descriptionは取得出来なくなります。

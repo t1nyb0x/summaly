@@ -1,7 +1,8 @@
 # 使用するプラグイン (適宜コメントアウト)
 allowedPlugins:
+#  - twitter
+#  - youtube
 #  - pixiv
 #  - nijie
 #  - iwara
 #  - komiflo
-#  - twitter

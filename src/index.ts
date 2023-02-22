@@ -59,6 +59,7 @@ export class Summary {
 			let summary = await general(_url, opts.lang);
 			if (summary == null) throw 'failed summarize';
 			const landingUrl = summary.url;
+
 			const match = this.plugins.filter(plugin => plugin.test(new URL(landingUrl)))[0];
 			if (match && match.postProcess) {
 				summary = await match.postProcess(summary);

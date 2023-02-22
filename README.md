@@ -56,6 +56,9 @@ descriptionは取得出来なくなります。
 画像が補完されます。  
 必要によりsensitiveフラグを付与します。
 
+## dlsite
+必要によりsensitiveフラグを付与します。
+
 ## Returns
 
 A Promise of an Object that contains properties below:

@@ -1,4 +1,4 @@
-import summaly from '../';
+import { Summary } from '..';
 import loadConfig from './load-config';
 import * as h3 from 'h3';
 import { createServer } from 'http';
@@ -6,6 +6,10 @@ import { Type, validateQuery } from 'h3-typebox';
 import { StatusError } from '../utils/status-error';
 
 const config = loadConfig();
+
+const summaryInstance = new Summary({
+	allowedPlugins: config.allowedPlugins
+});
 
 function validateUrl(url: string) {
 	const u = new URL(url);
@@ -28,10 +32,9 @@ router.get('/url', h3.eventHandler(async event => {
 	try {
 		validateUrl(query.url);
 
-		const summary = await summaly(query.url, {
+		const summary = await summaryInstance.summary(query.url, {
 			lang: query.lang,
 			followRedirects: false,
-			allowedPlugins: config.allowedPlugins || [],
 		});
 
 		h3.setResponseHeader(event, 'Cache-Control', 'public, max-age=604800');

@@ -21,7 +21,6 @@ export async function process(url: URL): Promise<Summaly> {
 	// build oEmbed url
 	const u = new URL('https://www.youtube.com/oembed');
 	u.searchParams.append('url', url.href);
-	console.log(u.href);
 
 	// get oEmbed
 	const j = await getJson(u.href, 'https://www.youtube.com') as OEmbed;

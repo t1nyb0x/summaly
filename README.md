@@ -44,6 +44,9 @@ YouTubeの取得が高速化されます。
 公式のoEmbed endpointを叩いています。  
 descriptionは取得出来なくなります。
 
+## dlsite
+必要によりsensitiveフラグを付与します。
+
 ## nijie
 画像が補完されます。  
 常にsensitiveになります。
@@ -54,9 +57,6 @@ descriptionは取得出来なくなります。
 
 ## komiflo
 画像が補完されます。  
-必要によりsensitiveフラグを付与します。
-
-## dlsite
 必要によりsensitiveフラグを付与します。
 
 ## Returns

@@ -28,9 +28,8 @@ export class Summary {
 			try {
 				const p = require(resolve(__dirname, 'plugins', key));
 				this.plugins.push(p);
-				console.log(`Plugin loaded ${key}`);
 			} catch (e) {
-				console.warn(`Plugin load failed ${key}`);
+				//
 			}
 		}
 	}

@@ -1,0 +1,34 @@
+import { SummalyEx } from '../summaly';
+export declare function test(url: URL): boolean;
+type ImageObject = {
+    "@context"?: string;
+    "@type": "ImageObject";
+    "name"?: string;
+    "description"?: string;
+    "text"?: string;
+    "interactionCount"?: string;
+    "datePublished"?: string;
+    "uploadDate"?: string;
+    "dateModified"?: string;
+    "copyrightYear"?: string;
+    "genre"?: string;
+    "contentLocation"?: string;
+    "width"?: Number;
+    "height"?: Number;
+    "thumbnailUrl"?: string;
+    "author"?: Person;
+    "creator"?: Person;
+    "editor"?: Person;
+    "copyrightHolder"?: Person;
+};
+type Person = {
+    "@context"?: string;
+    "@type": "Person";
+    "name"?: string;
+    "description"?: string;
+    "sameAs"?: string;
+    "image"?: string;
+};
+export declare const isImageObject: (object: any) => object is ImageObject;
+export declare function postProcess(summaly: SummalyEx): Promise<SummalyEx>;
+export {};

@@ -45,7 +45,8 @@ YouTubeの取得が高速化されます。
 descriptionは取得出来なくなります。
 
 ## dlsite
-必要によりsensitiveフラグを付与します。
+必要によりsensitiveフラグを付与します。  
+announce と work のURLの誤りを補正します。
 
 ## nijie
 画像が補完されます。  

@@ -1,3 +1,3 @@
-import { SummalyEx } from '../summaly';
+import { Summaly } from '../summaly';
 export declare function test(url: URL): boolean;
-export declare function postProcess(summaly: SummalyEx): Promise<SummalyEx>;
+export declare function process(url: URL): Promise<Summaly>;

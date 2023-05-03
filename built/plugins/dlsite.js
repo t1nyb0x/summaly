@@ -9,17 +9,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postProcess = exports.test = void 0;
+exports.process = exports.test = void 0;
+const general_1 = require("../general");
+const status_error_1 = require("../utils/status-error");
 function test(url) {
     return url.hostname === 'www.dlsite.com';
 }
 exports.test = test;
-function postProcess(summaly) {
+function process(url) {
     return __awaiter(this, void 0, void 0, function* () {
+        const summaly = yield (0, general_1.default)(url).catch(e => {
+            if (e instanceof status_error_1.StatusError && e.statusCode === 404) {
+                let pathname;
+                if (url.pathname.match(/^[/]\w+[/]announce[/]/)) {
+                    pathname = url.pathname.replace('/announce/', '/work/');
+                }
+                else if (url.pathname.match(/^[/]\w+[/]work[/]/)) {
+                    pathname = url.pathname.replace('/work/', '/announce/');
+                }
+                else {
+                    throw e;
+                }
+                const u = new URL(url);
+                u.pathname = pathname;
+                console.log('new', u.href);
+                return (0, general_1.default)(u);
+            }
+            throw e;
+        });
         const landingUrl = summaly.url;
         if (!landingUrl.match(/[/](?:home|comic|soft|app)[/]/))
             summaly.sensitive = true;
         return summaly;
     });
 }
-exports.postProcess = postProcess;
+exports.process = process;

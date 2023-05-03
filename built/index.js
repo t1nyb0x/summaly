@@ -21,10 +21,9 @@ class Summary {
             try {
                 const p = require((0, path_1.resolve)(__dirname, 'plugins', key));
                 this.plugins.push(p);
-                console.log(`Plugin loaded ${key}`);
             }
             catch (e) {
-                console.warn(`Plugin load failed ${key}`);
+                //
             }
         }
     }

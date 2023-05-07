@@ -32,7 +32,6 @@ function process(url) {
                 }
                 const u = new URL(url);
                 u.pathname = pathname;
-                console.log('new', u.href);
                 return (0, general_1.default)(u);
             }
             throw e;

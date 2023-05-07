@@ -20,6 +20,7 @@ const encoding_1 = require("./encoding");
 const cheerio = require("cheerio");
 const client_1 = require("../client");
 const agent_1 = require("./agent");
+const check_allowed_url_1 = require("./check-allowed-url");
 const PrivateIp = require('private-ip');
 const pipeline = util.promisify(stream.pipeline);
 const RESPONSE_TIMEOUT = 20 * 1000;
@@ -75,6 +76,9 @@ function getJson(url, referer) {
 exports.getJson = getJson;
 function getResponse(args) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (!(0, check_allowed_url_1.checkAllowedUrl)(args.url)) {
+            throw new status_error_1.StatusError('Invalid URL', 400);
+        }
         const timeout = RESPONSE_TIMEOUT;
         const operationTimeout = OPERATION_TIMEOUT;
         const req = (0, got_1.default)(args.url, {
@@ -93,6 +97,11 @@ function getResponse(args) {
             agent: agent_1.agent,
             http2: false,
             retry: 0,
+        });
+        req.on('redirect', (res, opts) => {
+            if (!(0, check_allowed_url_1.checkAllowedUrl)(opts.url)) {
+                req.cancel(`Invalid url: ${opts.url}`);
+            }
         });
         return yield receiveResponce({ req, typeFilter: args.typeFilter });
     });

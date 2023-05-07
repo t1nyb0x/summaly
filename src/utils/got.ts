@@ -8,6 +8,7 @@ import { detectEncoding, toUtf8 } from './encoding';
 import * as cheerio from 'cheerio';
 import { browserUA } from '../client';
 import { agent } from './agent';
+import { checkAllowedUrl } from './check-allowed-url';
 const PrivateIp = require('private-ip');
 
 const pipeline = util.promisify(stream.pipeline);
@@ -68,6 +69,10 @@ export async function getJson(url: string, referer: string) {
 }
 
 async function getResponse(args: { url: string, method: 'GET' | 'POST', body?: string, headers: Record<string, string>, typeFilter?: RegExp }) {
+	if (!checkAllowedUrl(args.url)) {
+		throw new StatusError('Invalid URL', 400);
+	}
+
 	const timeout = RESPONSE_TIMEOUT;
 	const operationTimeout = OPERATION_TIMEOUT;
 
@@ -87,6 +92,12 @@ async function getResponse(args: { url: string, method: 'GET' | 'POST', body?: s
 		agent: agent,
 		http2: false,
 		retry: 0,
+	});
+
+	req.on('redirect', (res, opts) => {
+		if (!checkAllowedUrl(opts.url)) {
+			req.cancel(`Invalid url: ${opts.url}`);
+		}
 	});
 
 	return await receiveResponce({ req, typeFilter: args.typeFilter });

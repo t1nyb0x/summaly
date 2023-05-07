@@ -11,13 +11,6 @@ const summaryInstance = new Summary({
 	allowedPlugins: config.allowedPlugins
 });
 
-function validateUrl(url: string) {
-	const u = new URL(url);
-	if (u.port !== '' && u.port !== '80' && u.port !== '443') {
-		throw `invalid port ${u.port}`;
-	}
-}
-
 const app = h3.createApp();
 const router = h3.createRouter();
 
@@ -30,8 +23,6 @@ router.get('/url', h3.eventHandler(async event => {
 	const query = validateQuery(event, validater);
 
 	try {
-		validateUrl(query.url);
-
 		const summary = await summaryInstance.summary(query.url, {
 			lang: query.lang,
 			followRedirects: false,

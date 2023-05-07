@@ -19,12 +19,6 @@ const config = (0, load_config_1.default)();
 const summaryInstance = new __1.Summary({
     allowedPlugins: config.allowedPlugins
 });
-function validateUrl(url) {
-    const u = new URL(url);
-    if (u.port !== '' && u.port !== '80' && u.port !== '443') {
-        throw `invalid port ${u.port}`;
-    }
-}
 const app = h3.createApp();
 const router = h3.createRouter();
 const validater = h3_typebox_1.Type.Object({
@@ -34,7 +28,6 @@ const validater = h3_typebox_1.Type.Object({
 router.get('/url', h3.eventHandler((event) => __awaiter(void 0, void 0, void 0, function* () {
     const query = (0, h3_typebox_1.validateQuery)(event, validater);
     try {
-        validateUrl(query.url);
         const summary = yield summaryInstance.summary(query.url, {
             lang: query.lang,
             followRedirects: false,

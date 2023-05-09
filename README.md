@@ -35,13 +35,16 @@ cp server_config.example.yml server_config.yml
 ## プラグイン
 
 ## twitter
+おすすめ。  
 Twitterの取得が高速化されます。  
 公式埋め込みウィジェットの取得先を独自に叩いて、CDNキャッシュされたTweetエンティティのようなものを取得しています。  
 必要によりsensitiveフラグを付与します。
 
 ## youtube
+おすすめ。  
 YouTubeの取得が高速化されます。  
 公式のoEmbed endpointを叩いています。  
+どうやら配信中のLiveの詳細が取得できるようになる模様。  
 descriptionは取得出来なくなります。
 
 ## dlsite
@@ -74,7 +77,7 @@ A Promise of an Object that contains properties below:
 | **thumbnail**   | *string*  | The url of the thumbnail of the web page |
 | **player**      | *Player*  | The player of the web page               |
 | **title**       | *string*  | The title of the web page                |
-| **url**         | *string*  | The url of the web page                  |
+| **url**         | *string*  | The url of the web page 最終リダイレクト先になります |
 | **sensitive**   | *boolean* | The content is sensitive or not          |
 
 ### Player

@@ -44,6 +44,11 @@ YouTubeの取得が高速化されます。
 公式のoEmbed endpointを叩いています。  
 descriptionは取得出来なくなります。
 
+## spotify
+Spotifyのプレビューが取得されます。  
+公式のoEmbed endpointを叩いています。  
+descriptionは取得出来なくなります。
+
 ## dlsite
 必要によりsensitiveフラグを付与します。  
 announce と work のURLの誤りを補正します。

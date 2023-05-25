@@ -48,6 +48,7 @@ YouTubeの取得が高速化されます。
 descriptionは取得出来なくなります。
 
 ## spotify
+すごく微妙。
 Spotifyのプレビューが取得されます。  
 公式のoEmbed endpointを叩いています。  
 descriptionは取得出来なくなります。

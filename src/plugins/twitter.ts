@@ -24,7 +24,7 @@ export async function process(url: URL): Promise<Summaly> {
 
 	return {
 		description: text,
-		icon: 'https://abs.twimg.com/favicons/twitter.2.ico',
+		icon: 'https://abs.twimg.com/favicons/twitter.3.ico',
 		sitename: 'Twitter',
 		thumbnail: j.video?.poster || j.photos?.[0]?.url || (j.user?.profile_image_url_https ? j.user?.profile_image_url_https.replace(/_normal\./, '.') : null) || null,
 		player: {

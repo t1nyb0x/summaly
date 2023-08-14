@@ -13,7 +13,7 @@ exports.process = exports.test = void 0;
 // 高速Twitterプラグイン
 const got_1 = require("../utils/got");
 function test(url) {
-    return /^twitter\.com$/.test(url.hostname)
+    return /^(?:twitter|x)\.com$/.test(url.hostname)
         && /^[/]\w+[/]status[/](\d+)/.test(url.pathname);
 }
 exports.test = test;
@@ -33,7 +33,7 @@ function process(url) {
         }
         return {
             description: text,
-            icon: 'https://abs.twimg.com/favicons/twitter.2.ico',
+            icon: 'https://abs.twimg.com/favicons/twitter.3.ico',
             sitename: 'Twitter',
             thumbnail: ((_e = j.video) === null || _e === void 0 ? void 0 : _e.poster) || ((_g = (_f = j.photos) === null || _f === void 0 ? void 0 : _f[0]) === null || _g === void 0 ? void 0 : _g.url) || (((_h = j.user) === null || _h === void 0 ? void 0 : _h.profile_image_url_https) ? (_j = j.user) === null || _j === void 0 ? void 0 : _j.profile_image_url_https.replace(/_normal\./, '.') : null) || null,
             player: {

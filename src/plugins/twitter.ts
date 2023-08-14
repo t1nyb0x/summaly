@@ -25,14 +25,14 @@ export async function process(url: URL): Promise<Summaly> {
 	return {
 		description: text,
 		icon: 'https://abs.twimg.com/favicons/twitter.3.ico',
-		sitename: 'Twitter',
+		sitename: 'X',
 		thumbnail: j.video?.poster || j.photos?.[0]?.url || (j.user?.profile_image_url_https ? j.user?.profile_image_url_https.replace(/_normal\./, '.') : null) || null,
 		player: {
 			url: null,
 			width: null,
 			height: null,
 		},
-		title: `${j.user?.name} on Twitter`,
+		title: `${j.user?.name} on X`,
 		sensitive: j.possibly_sensitive,
 		url: url.href,
 		medias: j.photos?.map(x => x.url as string) || undefined,

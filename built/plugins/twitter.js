@@ -34,14 +34,14 @@ function process(url) {
         return {
             description: text,
             icon: 'https://abs.twimg.com/favicons/twitter.3.ico',
-            sitename: 'Twitter',
+            sitename: 'X',
             thumbnail: ((_e = j.video) === null || _e === void 0 ? void 0 : _e.poster) || ((_g = (_f = j.photos) === null || _f === void 0 ? void 0 : _f[0]) === null || _g === void 0 ? void 0 : _g.url) || (((_h = j.user) === null || _h === void 0 ? void 0 : _h.profile_image_url_https) ? (_j = j.user) === null || _j === void 0 ? void 0 : _j.profile_image_url_https.replace(/_normal\./, '.') : null) || null,
             player: {
                 url: null,
                 width: null,
                 height: null,
             },
-            title: `${(_k = j.user) === null || _k === void 0 ? void 0 : _k.name} on Twitter`,
+            title: `${(_k = j.user) === null || _k === void 0 ? void 0 : _k.name} on X`,
             sensitive: j.possibly_sensitive,
             url: url.href,
             medias: ((_l = j.photos) === null || _l === void 0 ? void 0 : _l.map(x => x.url)) || undefined,

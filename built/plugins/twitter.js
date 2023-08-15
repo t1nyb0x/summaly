@@ -23,7 +23,11 @@ function process(url) {
         const m = url.pathname.match(/^[/]\w+[/]status[/](\d+)/);
         if (!m)
             throw 'err';
-        const u = `https://cdn.syndication.twimg.com/tweet-result?id=${m[1]}&lang=en`;
+        // token
+        const ob_o = x => x.toString(Math.pow(6, 2));
+        const ob_c = x => x.replace(/(0+|\.)/g, '');
+        const token = ob_c(ob_o(Number(m[1]) / 1e15 * Math.PI));
+        const u = `https://cdn.syndication.twimg.com/tweet-result?id=${m[1]}&token=${token}&lang=en`;
         const j = yield (0, got_1.getJson)(u, 'https://platform.twitter.com/embed/index.html');
         let text = j.text || '';
         // 本文の添付メディアのt.co消し

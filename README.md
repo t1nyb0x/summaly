@@ -35,7 +35,6 @@ cp server_config.example.yml server_config.yml
 ## プラグイン
 
 ## twitter
-~~Twitterの取得が高速化されます。~~ 遅くなった  
 公式埋め込みウィジェットの取得先を独自に叩いて、CDNキャッシュされたTweetエンティティのようなものを取得しています。  
 必要によりsensitiveフラグを付与します。
 

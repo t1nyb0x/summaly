@@ -34,12 +34,13 @@ exports.default = (url, lang = null) => __awaiter(void 0, void 0, void 0, functi
         $('link[rel="apple-touch-icon image_src"]').attr('href') ||
         null;
     image = image ? new URL(image, landingUrl.href).href : null;
-    const playerUrl = (twitterCard !== 'summary_large_image' && $('meta[property="twitter:player"]').attr('content')) ||
+    let playerUrl = (twitterCard !== 'summary_large_image' && $('meta[property="twitter:player"]').attr('content')) ||
         (twitterCard !== 'summary_large_image' && $('meta[name="twitter:player"]').attr('content')) ||
         $('meta[property="og:video"]').attr('content') ||
         $('meta[property="og:video:secure_url"]').attr('content') ||
         $('meta[property="og:video:url"]').attr('content') ||
         null;
+    playerUrl = playerUrl ? new URL(playerUrl, landingUrl.href).href : null;
     const playerWidth = parseInt($('meta[property="twitter:player:width"]').attr('content') ||
         $('meta[name="twitter:player:width"]').attr('content') ||
         $('meta[property="og:video:width"]').attr('content') ||

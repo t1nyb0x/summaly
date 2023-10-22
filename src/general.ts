@@ -34,13 +34,14 @@ export default async (url: URL, lang: string | null = null): Promise<SummalyEx> 
 
 	image = image ?  new URL(image, landingUrl.href).href : null;
 
-	const playerUrl =
+	let playerUrl =
 		(twitterCard !== 'summary_large_image' && $('meta[property="twitter:player"]').attr('content')) ||
 		(twitterCard !== 'summary_large_image' && $('meta[name="twitter:player"]').attr('content')) ||
 		$('meta[property="og:video"]').attr('content') ||
 		$('meta[property="og:video:secure_url"]').attr('content') ||
 		$('meta[property="og:video:url"]').attr('content') ||
 		null;
+	playerUrl = playerUrl ? new URL(playerUrl, landingUrl.href).href : null;
 
 	const playerWidth = parseInt(
 		$('meta[property="twitter:player:width"]').attr('content') ||

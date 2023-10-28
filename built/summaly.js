@@ -7,6 +7,7 @@ function StripEx(ex) {
         icon: ex.icon,
         sitename: ex.sitename,
         thumbnail: ex.thumbnail,
+        medias: ex.medias,
         player: ex.player,
         title: ex.title,
         sensitive: ex.sensitive,

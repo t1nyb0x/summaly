@@ -77,6 +77,7 @@ exports.default = (url, lang = null) => __awaiter(void 0, void 0, void 0, functi
         icon,
         description,
         thumbnail: image,
+        medias: image ? [image] : undefined,
         player: {
             url: playerUrl,
             width: Number.isNaN(playerWidth) ? null : playerWidth,

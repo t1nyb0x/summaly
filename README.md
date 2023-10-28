@@ -79,6 +79,7 @@ A Promise of an Object that contains properties below:
 | **icon**        | *string*  | The url of the icon of the web page      |
 | **sitename**    | *string*  | The name of the web site                 |
 | **thumbnail**   | *string*  | The url of the thumbnail of the web page |
+| **medias**      | *string[]*| 出来ればオリジナル画像の一覧を返す |
 | **player**      | *Player*  | The player of the web page               |
 | **title**       | *string*  | The title of the web page                |
 | **url**         | *string*  | The url of the web page 最終リダイレクト先になります |

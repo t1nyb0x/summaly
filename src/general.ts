@@ -96,6 +96,7 @@ export default async (url: URL, lang: string | null = null): Promise<SummalyEx> 
 		icon,
 		description,
 		thumbnail: image,
+		medias: image ? [image] : undefined,
 		player: {
 			url: playerUrl,
 			width: Number.isNaN(playerWidth) ? null : playerWidth,

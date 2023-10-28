@@ -52,6 +52,7 @@ export class Summary {
 			if (summary.player) summary.player.url = sanitizeUrl(summary.player.url);
 			summary.icon = sanitizeUrl(summary.icon);
 			summary.thumbnail = sanitizeUrl(summary.thumbnail);
+			if (summary.medias) { summary.medias.map(x => sanitizeUrl(x)) }
 
 			return summary;
 		} else {
@@ -67,6 +68,7 @@ export class Summary {
 			if (summary.player) summary.player.url = sanitizeUrl(summary.player.url);
 			summary.icon = sanitizeUrl(summary.icon);
 			summary.thumbnail = sanitizeUrl(summary.thumbnail);
+			if (summary.medias) { summary.medias.map(x => sanitizeUrl(x)) }
 
 			return StripEx(summary);
 		}

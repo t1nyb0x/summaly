@@ -44,6 +44,9 @@ class Summary {
                     summary.player.url = (0, sanitize_url_1.sanitizeUrl)(summary.player.url);
                 summary.icon = (0, sanitize_url_1.sanitizeUrl)(summary.icon);
                 summary.thumbnail = (0, sanitize_url_1.sanitizeUrl)(summary.thumbnail);
+                if (summary.medias) {
+                    summary.medias.map(x => (0, sanitize_url_1.sanitizeUrl)(x));
+                }
                 return summary;
             }
             else {
@@ -59,6 +62,9 @@ class Summary {
                     summary.player.url = (0, sanitize_url_1.sanitizeUrl)(summary.player.url);
                 summary.icon = (0, sanitize_url_1.sanitizeUrl)(summary.icon);
                 summary.thumbnail = (0, sanitize_url_1.sanitizeUrl)(summary.thumbnail);
+                if (summary.medias) {
+                    summary.medias.map(x => (0, sanitize_url_1.sanitizeUrl)(x));
+                }
                 return (0, summaly_1.StripEx)(summary);
             }
         });

@@ -2,6 +2,7 @@ import cleanupTitle from './utils/cleanup-title';
 import { decodeEntities } from './utils/decode-entities';
 import { SummalyEx } from './summaly';
 import { scpaping } from './utils/got';
+import { cleanupUrl } from './utils/cleanup-url';
 
 export default async (url: URL, lang: string | null = null): Promise<SummalyEx> => {
 	if (lang && !lang.match(/^[\w-]+(\s*,\s*[\w-]+)*$/)) lang = null;
@@ -31,17 +32,17 @@ export default async (url: URL, lang: string | null = null): Promise<SummalyEx> 
 		$('link[rel="apple-touch-icon image_src"]').attr('href') ??
 		null;
 
-	image = image ?  new URL(image, landingUrl.href).href : null;
+	image = cleanupUrl(image, landingUrl.href);
 
 	let playerUrl =
-		(twitterCard !== 'summary_large_image' && $('meta[name="twitter:player"]').attr('content')) ??
-		(twitterCard !== 'summary_large_image' && $('meta[property="twitter:player"]').attr('content')) ??
+		(twitterCard !== 'summary_large_image' ? $('meta[name="twitter:player"]').attr('content') : null) ??
+		(twitterCard !== 'summary_large_image' ? $('meta[property="twitter:player"]').attr('content') : null) ??
 		$('meta[property="og:video"]').attr('content') ??
 		$('meta[property="og:video:secure_url"]').attr('content') ??
 		$('meta[property="og:video:url"]').attr('content') ??
 		null;
 
-	playerUrl = playerUrl ? new URL(playerUrl, landingUrl.href).href : null;
+	playerUrl = cleanupUrl(playerUrl, landingUrl.href);
 
 	const playerWidth = parseInt(
 		$('meta[name="twitter:player:width"]').attr('content') ??
@@ -81,7 +82,7 @@ export default async (url: URL, lang: string | null = null): Promise<SummalyEx> 
 		$('link[rel="icon"]').attr('href') ??
 		null;
 
-	const icon = favicon ? new URL(favicon, landingUrl.href).href : null;
+	const icon = cleanupUrl(favicon, landingUrl.href);
 
 	const sensitive = $('.tweet').attr('data-possibly-sensitive') === 'true';
 

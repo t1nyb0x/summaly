@@ -79,7 +79,7 @@ export default async (url: URL, lang: string | null = null): Promise<SummalyEx> 
 	const favicon =
 		$('link[rel="shortcut icon"]').attr('href') ??
 		$('link[rel="icon"]').attr('href') ??
-		'/favicon.ico';
+		null;
 
 	const icon = favicon ? new URL(favicon, landingUrl.href).href : null;
 

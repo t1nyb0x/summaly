@@ -89,7 +89,7 @@ function getResponse(args) {
                 lookup: timeout,
                 connect: timeout,
                 secureConnect: timeout,
-                socket: timeout,
+                socket: timeout, // read timeout
                 response: timeout,
                 send: timeout,
                 request: operationTimeout, // whole operation timeout
@@ -161,7 +161,7 @@ function fetchUrl(url, path) {
                 lookup: timeout,
                 connect: timeout,
                 secureConnect: timeout,
-                socket: timeout,
+                socket: timeout, // read timeout
                 response: timeout,
                 send: timeout,
                 request: operationTimeout, // whole operation timeout

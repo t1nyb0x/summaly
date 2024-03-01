@@ -28,7 +28,6 @@ export async function process(url: URL): Promise<Summaly> {
 	});
 
 	const landingUrl = summaly.url;
-	console.log(landingUrl);
 	if (!landingUrl.match(/[/](?:home|comic|soft|app|ai)[/]/)) summaly.sensitive = true;
 	return summaly;
 }

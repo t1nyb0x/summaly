@@ -37,7 +37,8 @@ function process(url) {
             throw e;
         });
         const landingUrl = summaly.url;
-        if (!landingUrl.match(/[/](?:home|comic|soft|app)[/]/))
+        console.log(landingUrl);
+        if (!landingUrl.match(/[/](?:home|comic|soft|app|ai)[/]/))
             summaly.sensitive = true;
         return summaly;
     });

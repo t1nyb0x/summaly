@@ -1,0 +1,19 @@
+[Unit]
+Description=summaly
+After=network.target
+
+[Service]
+Type=simple
+User=summaly
+ExecStart=/usr/bin/node --tls-min-v1.0 ./built/server
+WorkingDirectory=/home/summaly/summaly
+Environment="NODE_ENV=production"
+#Environment="SUMMALY_FAMILY=4"
+TimeoutSec=60
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=summaly
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -26,7 +26,7 @@ const pipeline = util.promisify(stream.pipeline);
 const RESPONSE_TIMEOUT = 20 * 1000;
 const OPERATION_TIMEOUT = 60 * 1000;
 const MAX_RESPONSE_SIZE = 10 * 1024 * 1024;
-const BOT_UA = `Twitterbot/1.0`;
+const BOT_UA = `Summalybot/1.0`;
 const NOT_BOT_UA = [
     'www.sankei.com',
 ];

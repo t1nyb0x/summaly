@@ -1,7 +1,7 @@
 # 使用するプラグイン (適宜コメントアウト)
 allowedPlugins:
-#  - twitter
-#  - youtube
+  - twitter
+  - youtube
 #  - spotify
 #  - nijie
 #  - iwara

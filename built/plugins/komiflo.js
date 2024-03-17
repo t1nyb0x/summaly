@@ -16,8 +16,8 @@ function test(url) {
 }
 exports.test = test;
 function postProcess(summaly) {
-    var _a, _b, _c, _d, _e, _f, _g, _h;
     return __awaiter(this, void 0, void 0, function* () {
+        var _a, _b, _c, _d, _e, _f, _g, _h;
         const landingUrl = summaly.url;
         // 作品ページ？
         const m = landingUrl.match(/komiflo[.]com(?:[/]#!)?[/]comics[/](\d+)/);

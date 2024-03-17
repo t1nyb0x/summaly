@@ -10,6 +10,8 @@ function sanitizeUrl(str) {
             return str;
         if (u.protocol === 'http:')
             return str;
+        if (u.protocol === 'data:')
+            return str;
     }
     catch (_a) {
         return null;

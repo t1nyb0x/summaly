@@ -21,6 +21,7 @@ const cheerio = require("cheerio");
 const client_1 = require("../client");
 const agent_1 = require("./agent");
 const check_allowed_url_1 = require("./check-allowed-url");
+const pdf = require('pdf-parse');
 const PrivateIp = require('private-ip');
 const pipeline = util.promisify(stream.pipeline);
 const RESPONSE_TIMEOUT = 20 * 1000;
@@ -33,6 +34,7 @@ const NOT_BOT_UA = [
 const LOG_CONSOLE = !!process.env.SUMMALY_LOG_CONSOLE;
 function scpaping(url, opts) {
     return __awaiter(this, void 0, void 0, function* () {
+        var _a, _b;
         const u = new URL(url);
         const headers = {
             'accept': 'text/html, application/xhtml+xml',
@@ -46,19 +48,30 @@ function scpaping(url, opts) {
             url,
             method: 'GET',
             headers,
-            typeFilter: /^(text\/html|application\/xhtml\+xml)/,
+            typeFilter: /^(text\/html|application\/xhtml\+xml|application\/pdf)/,
         });
         if (response.ip && PrivateIp(response.ip)) {
             throw new status_error_1.StatusError(`Private IP rejected ${response.ip}`, 400, 'Private IP Rejected');
         }
-        const encoding = (0, encoding_1.detectEncoding)(response.rawBody);
-        const body = (0, encoding_1.toUtf8)(response.rawBody, encoding);
-        const $ = cheerio.load(body);
-        return {
-            body,
-            $,
-            response,
-        };
+        if ((_a = response.headers['content-type']) === null || _a === void 0 ? void 0 : _a.match(/^application\/pdf/)) {
+            const data = yield pdf(response.rawBody);
+            return {
+                pdf: {
+                    title: (_b = data === null || data === void 0 ? void 0 : data.info) === null || _b === void 0 ? void 0 : _b.Title,
+                },
+                response,
+            };
+        }
+        else {
+            const encoding = (0, encoding_1.detectEncoding)(response.rawBody);
+            const body = (0, encoding_1.toUtf8)(response.rawBody, encoding);
+            const $ = cheerio.load(body);
+            return {
+                body,
+                $,
+                response,
+            };
+        }
     });
 }
 exports.scpaping = scpaping;

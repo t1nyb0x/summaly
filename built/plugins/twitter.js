@@ -18,8 +18,8 @@ function test(url) {
 }
 exports.test = test;
 function process(url) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
     return __awaiter(this, void 0, void 0, function* () {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
         const m = url.pathname.match(/^[/]\w+[/]status[/](\d+)/);
         if (!m)
             throw 'err';

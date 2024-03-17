@@ -9,6 +9,7 @@ import * as cheerio from 'cheerio';
 import { browserUA } from '../client';
 import { agent } from './agent';
 import { checkAllowedUrl } from './check-allowed-url';
+const pdf = require('pdf-parse');
 const PrivateIp = require('private-ip');
 
 const pipeline = util.promisify(stream.pipeline);
@@ -39,26 +40,36 @@ export async function scpaping(url: string, opts?: { lang?: string; useRange?: b
 		url,
 		method: 'GET',
 		headers,
-		typeFilter: /^(text\/html|application\/xhtml\+xml)/,
+		typeFilter: /^(text\/html|application\/xhtml\+xml|application\/pdf)/,
 	});
 
 	if (response.ip && PrivateIp(response.ip)) {
 		throw new StatusError(`Private IP rejected ${response.ip}`, 400, 'Private IP Rejected');
 	}
 
-	const encoding = detectEncoding(response.rawBody);
-	const body = toUtf8(response.rawBody, encoding);
-	const $ = cheerio.load(body);
+	if (response.headers['content-type']?.match(/^application\/pdf/)) {
+		const data = await pdf(response.rawBody);
+		return {
+			pdf: {
+				title: data?.info?.Title as string | undefined,
+			},
+			response,
+		}
+	} else {
+		const encoding = detectEncoding(response.rawBody);
+		const body = toUtf8(response.rawBody, encoding);
+		const $ = cheerio.load(body);
 
-	return {
-		body,
-		$,
-		response,
-	};
+		return {
+			body,
+			$,
+			response,
+		};
+	}
 }
 
 export async function getJson(url: string, referer: string) {
-	const res = await getResponse({
+	const res = await getResponse<string>({
 		url,
 		method: 'GET',
 		headers: {
@@ -71,7 +82,7 @@ export async function getJson(url: string, referer: string) {
 	return await JSON.parse(res.body);
 }
 
-async function getResponse(args: { url: string, method: 'GET' | 'POST', body?: string, headers: Record<string, string>, typeFilter?: RegExp }) {
+async function getResponse<T>(args: { url: string, method: 'GET' | 'POST', body?: string, headers: Record<string, string>, typeFilter?: RegExp }) {
 	if (!checkAllowedUrl(args.url)) {
 		throw new StatusError('Invalid URL', 400);
 	}
@@ -79,7 +90,7 @@ async function getResponse(args: { url: string, method: 'GET' | 'POST', body?: s
 	const timeout = RESPONSE_TIMEOUT;
 	const operationTimeout = OPERATION_TIMEOUT;
 
-	const req = got<string>(args.url, {
+	const req = got<T>(args.url, {
 		method: args.method,
 		headers: args.headers,
 		body: args.body,
@@ -104,7 +115,7 @@ async function getResponse(args: { url: string, method: 'GET' | 'POST', body?: s
 		}
 	});
 
-	return await receiveResponce({ req, typeFilter: args.typeFilter });
+	return await receiveResponce<T>({ req, typeFilter: args.typeFilter });
 }
 
 async function receiveResponce<T>(args: { req: Got.CancelableRequest<Got.Response<T>>, typeFilter?: RegExp }) {

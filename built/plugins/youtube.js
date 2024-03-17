@@ -26,8 +26,8 @@ function test(url) {
 }
 exports.test = test;
 function process(url) {
-    var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
+        var _a, _b, _c;
         // build oEmbed url
         const u = new URL('https://www.youtube.com/oembed');
         u.searchParams.append('url', url.href);

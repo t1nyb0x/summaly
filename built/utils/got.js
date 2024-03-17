@@ -30,6 +30,7 @@ const BOT_UA = `Summalybot/1.0`;
 const NOT_BOT_UA = [
     'www.sankei.com',
 ];
+const LOG_CONSOLE = !!process.env.SUMMALY_LOG_CONSOLE;
 function scpaping(url, opts) {
     return __awaiter(this, void 0, void 0, function* () {
         const u = new URL(url);
@@ -102,7 +103,8 @@ function getResponse(args) {
         });
         req.on('redirect', (res, opts) => {
             if (!(0, check_allowed_url_1.checkAllowedUrl)(opts.url)) {
-                console.warn(`Invalid url: ${opts.url}`);
+                if (LOG_CONSOLE)
+                    console.warn(`Invalid url: ${opts.url}`);
                 req.cancel();
             }
         });
@@ -118,19 +120,22 @@ function receiveResponce(args) {
             if (res.statusCode === 206) {
                 const m = ((_a = res.headers['content-range']) !== null && _a !== void 0 ? _a : '').match(new RegExp(/^bytes\s+0-(\d+)\/(\d+)$/, 'i')); // bytes 0-47254/47255
                 if (m == null) {
-                    console.warn(`Invalid content-range '${res.headers['content-range']}'`);
+                    if (LOG_CONSOLE)
+                        console.warn(`Invalid content-range '${res.headers['content-range']}'`);
                     req.cancel();
                     return;
                 }
                 if (Number(m[1]) + 1 !== Number(m[2])) {
-                    console.warn(`maxSize exceeded by content-range (${m[2]} > ${maxSize}) on response`);
+                    if (LOG_CONSOLE)
+                        console.warn(`maxSize exceeded by content-range (${m[2]} > ${maxSize}) on response`);
                     req.cancel();
                     return;
                 }
             }
             // Check html
             if (args.typeFilter && !((_b = res.headers['content-type']) === null || _b === void 0 ? void 0 : _b.match(args.typeFilter))) {
-                console.warn(`Rejected by type filter ${res.headers['content-type']}`);
+                if (LOG_CONSOLE)
+                    console.warn(`Rejected by type filter ${res.headers['content-type']}`);
                 req.cancel();
                 return;
             }
@@ -139,7 +144,8 @@ function receiveResponce(args) {
             if (contentLength != null) {
                 const size = Number(contentLength);
                 if (size > maxSize) {
-                    console.warn(`maxSize exceeded by content-length (${size} > ${maxSize}) on response`);
+                    if (LOG_CONSOLE)
+                        console.warn(`maxSize exceeded by content-length (${size} > ${maxSize}) on response`);
                     req.cancel();
                     return;
                 }
@@ -148,7 +154,8 @@ function receiveResponce(args) {
         // 受信中のデータでサイズチェック
         req.on('downloadProgress', (progress) => {
             if (progress.transferred > maxSize && progress.percent !== 1) {
-                console.warn(`maxSize exceeded in transfer (${progress.transferred} > ${maxSize}) on response`);
+                if (LOG_CONSOLE)
+                    console.warn(`maxSize exceeded in transfer (${progress.transferred} > ${maxSize}) on response`);
                 req.cancel();
                 return;
             }

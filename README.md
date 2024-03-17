@@ -1,11 +1,11 @@
 summaly
 ================================================================
 
-fork of [summaly](https://github.com/syuilo/summaly)
+fork of [syuilo/summaly](https://github.com/syuilo/summaly)  
+altanative of [misskey-dev/summaly](https://github.com/misskey-dev/summaly)  
 
-オリジナルとの違いは
-
-ほぼ全てが違う、バージョンはあてにならない。
+dev-summalyとの違いは
+- 速い
 
 ## インストールとビルド
 ```
@@ -31,6 +31,11 @@ cp server_config.example.yml server_config.yml
 ```
 
 ファイル内の各プラグインの行をコメントアウトして有効にすることが出来ます。
+
+### リバースプロキシのサンプル
+
+本アプリケーション自体にはcache及びcache-lock機構が含まれないため、公開Summaly Proxyを運用する場合は前段にnginx等を入れて対応することを推奨します。  
+[nginxサンプル](/summaly.example.nginx)
 
 ## プラグイン
 

@@ -17,6 +17,17 @@ exports.default = (url_1, ...args_1) => __awaiter(void 0, [url_1, ...args_1], vo
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8;
     if (lang && !lang.match(/^[\w-]+(\s*,\s*[\w-]+)*$/))
         lang = null;
+    if (url.host.indexOf('spotify.link') === 0 || url.host.indexOf('spotify.app.link') === 0) {
+        const res = yield (0, got_1.scpaping)(url.href, { lang: lang || undefined, useRange });
+        const $ = res.$;
+        if (!$)
+            throw new Error('unex 1');
+        // spotify.link, spotify.app.linkのsecondary-actionにopen.spotify.comがあるので、後続のスクレイピング対象に置き換える
+        let secondaryAction = $('a.secondary-action').attr('href');
+        if (secondaryAction === undefined)
+            secondaryAction = url.host;
+        url.href = secondaryAction;
+    }
     const res = yield (0, got_1.scpaping)(url.href, { lang: lang || undefined, useRange });
     const $ = res.$;
     const landingUrl = new URL(res.response.url);

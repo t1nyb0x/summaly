@@ -7,6 +7,17 @@ import { cleanupUrl } from './utils/cleanup-url';
 export default async (url: URL, lang: string | null = null, useRange = false): Promise<SummalyEx> => {
 	if (lang && !lang.match(/^[\w-]+(\s*,\s*[\w-]+)*$/)) lang = null;
 
+	if (url.host.indexOf('spotify.link') === 0 || url.host.indexOf('spotify.app.link') === 0) {
+		const res = await scpaping(url.href, { lang: lang || undefined, useRange});
+		const $ = res.$;
+		if (!$) throw new Error('unex 1');
+		// spotify.link, spotify.app.linkのsecondary-actionにopen.spotify.comがあるので、後続のスクレイピング対象に置き換える
+		let secondaryAction =
+			$('a.secondary-action').attr('href');
+		if (secondaryAction === undefined) secondaryAction = url.host;
+		url.href = secondaryAction;
+	}
+
 	const res = await scpaping(url.href, { lang: lang || undefined, useRange });
 	const $ = res.$;
 	const landingUrl = new URL(res.response.url);

@@ -1,40 +1,30 @@
 import { getJson } from '../utils/got';
 import { Summaly } from '../summaly';
 import * as cheerio from 'cheerio';
-import { scpaping } from '../utils/got';
+import general from '../general';
 
 export function test(url: URL): boolean {
 	if (url.hostname === 'open.spotify.com' || url.hostname === 'spotify.link' || url.hostname === 'spotify.app.link') {
 		return true;
 	}
+
 	return false;
 }
 
-export async function process(url: URL, lang: string | null = null, useRange = false): Promise<Summaly> {
-	if (url.hostname.indexOf('spotify.link') === 0 || url.hostname.indexOf('spotify.app.link') === 0) {
-		if (url.hostname === 'spotify.link') {
-			url.hostname = 'spotify.app.link';
-		}
+export async function process(url: URL): Promise<Summaly> {
+	// get summary
+	const originalUrl = new URL(url.href);
+	if (url.hostname === 'spotify.link') url.hostname = 'spotify.app.link';
+	const summary = await general(url);
+	originalUrl.href = summary.url;
 
-		const scrapingResult = await scpaping(url.href, { lang: lang || undefined, useRange });
-
-		if (!scrapingResult.$) {
-			throw new Error('Scraping failed');
-		}
-
-		let openSpotifyUrl = scrapingResult.$('a.secondary-action').attr('href');
-		if (!openSpotifyUrl) {
-			openSpotifyUrl = url.href;
-		}
-
-		url.href = openSpotifyUrl;
-	}
-	
+	// build oEmbed url
 	const oEmbedUrl = new URL('https://open.spotify.com/oembed');
-	oEmbedUrl.searchParams.append('url', url.href);
-	
+	oEmbedUrl.searchParams.append('url', originalUrl.href);
+
+	// get oEmbed
 	const oEmbedResponse = await getJson(oEmbedUrl.href, 'https://spotify.com') as OEmbed;
-	
+	// parse
 	const $ = cheerio.load(oEmbedResponse.html);
 
 	const playerUrl = $('iframe').attr('src');
@@ -42,7 +32,7 @@ export async function process(url: URL, lang: string | null = null, useRange = f
 
 	return {
 		title: oEmbedResponse.title ?? null,
-		description: oEmbedResponse.description ?? null,
+		description: summary.description,
 		icon: 'https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png',
 		sitename: oEmbedResponse.provider_name ?? null,
 		thumbnail: oEmbedResponse.thumbnail_url ?? null,
@@ -51,7 +41,7 @@ export async function process(url: URL, lang: string | null = null, useRange = f
 			width: oEmbedResponse.width,
 			height: oEmbedResponse.height,
 		},
-		url: url.href,
+		url: originalUrl.href,
 	};
 }
 
@@ -63,8 +53,7 @@ type OEmbed = {
 	author_url?: string;
 	provider_name?: string;
 	provider_url?: string;
-	cache_age?: number;
-	description?: string;
+	cache_age?: number; // in sec
 	thumbnail_url?: string;
 	thumbnail_height: number,
 	thumbnail_width: number,

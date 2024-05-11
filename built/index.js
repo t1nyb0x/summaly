@@ -75,5 +75,5 @@ exports.Summary = Summary;
  */
 exports.default = (url, requestOptions) => __awaiter(void 0, void 0, void 0, function* () {
     const s = new Summary();
-    return s.summary(url, requestOptions);
+    return yield s.summary(url, requestOptions);
 });

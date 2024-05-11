@@ -79,5 +79,5 @@ export class Summary {
  */
 export default async (url: string, requestOptions?: RequestOptions): Promise<Summaly> => {
 	const s = new Summary();
-	return s.summary(url, requestOptions);
+	return await s.summary(url, requestOptions);
 };

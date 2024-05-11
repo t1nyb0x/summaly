@@ -24,6 +24,8 @@ function process(url) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a, _b, _c;
         // get summary
+        if (url.hostname === 'spotify.link')
+            url.hostname = 'spotify.app.link';
         const summary = yield (0, general_1.default)(url);
         url.href = summary.url;
         // build oEmbed url

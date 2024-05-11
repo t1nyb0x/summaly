@@ -13,6 +13,7 @@ export function test(url: URL): boolean {
 
 export async function process(url: URL): Promise<Summaly> {
 	// get summary
+	if (url.hostname === 'spotify.link') url.hostname = 'spotify.app.link';
 	const summary = await general(url);
 	url.href = summary.url; 
 

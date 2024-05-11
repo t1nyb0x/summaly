@@ -24,32 +24,33 @@ function process(url) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a, _b, _c;
         // get summary
+        const originalUrl = new URL(url.href);
         if (url.hostname === 'spotify.link')
             url.hostname = 'spotify.app.link';
         const summary = yield (0, general_1.default)(url);
-        url.href = summary.url;
+        originalUrl.href = summary.url;
         // build oEmbed url
-        const u = new URL('https://open.spotify.com/oembed');
-        u.searchParams.append('url', url.href);
+        const oEmbedUrl = new URL('https://open.spotify.com/oembed');
+        oEmbedUrl.searchParams.append('url', originalUrl.href);
         // get oEmbed
-        const j = yield (0, got_1.getJson)(u.href, 'https://spotify.com');
+        const oEmbedResponse = yield (0, got_1.getJson)(oEmbedUrl.href, 'https://spotify.com');
         // parse
-        const $ = cheerio.load(j.html);
-        const src = $('iframe').attr('src');
-        if (!(src === null || src === void 0 ? void 0 : src.match(/^https?:[/][/]/)))
-            throw 'invalid src';
+        const $ = cheerio.load(oEmbedResponse.html);
+        const playerUrl = $('iframe').attr('src');
+        if (!(playerUrl === null || playerUrl === void 0 ? void 0 : playerUrl.match(/^https?:\/\//)))
+            throw 'Invalid player URL';
         return {
-            title: (_a = j.title) !== null && _a !== void 0 ? _a : null,
+            title: (_a = oEmbedResponse.title) !== null && _a !== void 0 ? _a : null,
             description: summary.description,
             icon: 'https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png',
-            sitename: (_b = j.provider_name) !== null && _b !== void 0 ? _b : null,
-            thumbnail: (_c = j.thumbnail_url) !== null && _c !== void 0 ? _c : null,
+            sitename: (_b = oEmbedResponse.provider_name) !== null && _b !== void 0 ? _b : null,
+            thumbnail: (_c = oEmbedResponse.thumbnail_url) !== null && _c !== void 0 ? _c : null,
             player: {
-                url: src,
-                width: j.width,
-                height: j.height,
+                url: playerUrl,
+                width: oEmbedResponse.width,
+                height: oEmbedResponse.height,
             },
-            url: url.href,
+            url: originalUrl.href,
         };
     });
 }

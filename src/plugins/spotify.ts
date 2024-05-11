@@ -13,35 +13,35 @@ export function test(url: URL): boolean {
 
 export async function process(url: URL): Promise<Summaly> {
 	// get summary
+	const originalUrl = new URL(url.href);
 	if (url.hostname === 'spotify.link') url.hostname = 'spotify.app.link';
 	const summary = await general(url);
-	url.href = summary.url; 
+	originalUrl.href = summary.url;
 
 	// build oEmbed url
-	const u = new URL('https://open.spotify.com/oembed');
-	u.searchParams.append('url', url.href);
+	const oEmbedUrl = new URL('https://open.spotify.com/oembed');
+	oEmbedUrl.searchParams.append('url', originalUrl.href);
 
 	// get oEmbed
-	const j = await getJson(u.href, 'https://spotify.com') as OEmbed;
-
+	const oEmbedResponse = await getJson(oEmbedUrl.href, 'https://spotify.com') as OEmbed;
 	// parse
-	const $ = cheerio.load(j.html);
+	const $ = cheerio.load(oEmbedResponse.html);
 
-	const src = $('iframe').attr('src');
-	if (!src?.match(/^https?:[/][/]/)) throw 'invalid src';
+	const playerUrl = $('iframe').attr('src');
+	if (!playerUrl?.match(/^https?:\/\//)) throw 'Invalid player URL';
 
 	return {
-		title: j.title ?? null,
+		title: oEmbedResponse.title ?? null,
 		description: summary.description,
 		icon: 'https://open.spotifycdn.com/cdn/images/favicon32.b64ecc03.png',
-		sitename: j.provider_name ?? null,
-		thumbnail: j.thumbnail_url ?? null,
+		sitename: oEmbedResponse.provider_name ?? null,
+		thumbnail: oEmbedResponse.thumbnail_url ?? null,
 		player: {
-			url: src,
-			width: j.width,
-			height: j.height,
+			url: playerUrl,
+			width: oEmbedResponse.width,
+			height: oEmbedResponse.height,
 		},
-		url: url.href,
+		url: originalUrl.href,
 	};
 }
 

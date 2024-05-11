@@ -18,6 +18,8 @@ exports.default = (url_1, ...args_1) => __awaiter(void 0, [url_1, ...args_1], vo
     if (lang && !lang.match(/^[\w-]+(\s*,\s*[\w-]+)*$/))
         lang = null;
     if (url.host.indexOf('spotify.link') === 0 || url.host.indexOf('spotify.app.link') === 0) {
+        if (url.host === 'spotify.link')
+            url.href.replace('spotify.link', 'spotify.app.link');
         const res = yield (0, got_1.scpaping)(url.href, { lang: lang || undefined, useRange });
         const $ = res.$;
         if (!$)

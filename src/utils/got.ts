@@ -21,6 +21,7 @@ const BOT_UA = `Summalybot/1.0`;
 
 const NOT_BOT_UA = [
 	'www.sankei.com',
+	'abema.tv',
 ];
 
 const LOG_CONSOLE = !!process.env.SUMMALY_LOG_CONSOLE;
